@@ -49,3 +49,21 @@ class Solution1 {
         }
     }
 }
+
+class Solution2 {
+    public boolean isValidBST(TreeNode root) {
+        return isBSTHelper(root, Integer.MAX_VALUE, Integer.MIN_VALUE);
+    }
+    
+    private boolean isBSTHelper(TreeNode node, int max, int min) {
+        if (node == null) {
+            return true;
+        }
+        
+        if (node.val >= max || node.val <= min) {
+            return false;
+        }
+        
+        return isBSTHelper(node.left, node.val, min) && isBSTHelper(node.right, max, node.val);
+    }
+}
