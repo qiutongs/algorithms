@@ -38,6 +38,7 @@ class Solution2 {
     private void dfs(List<List<Integer>> result, List<Integer> comb, int n, int k) {
         if (k == 0) {
             result.add(new ArrayList<>(comb));
+            return;
         }
         
         if (n == 0) {

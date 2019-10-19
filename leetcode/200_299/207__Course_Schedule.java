@@ -1,4 +1,4 @@
-class Solution {
+class Solution1 {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         if (numCourses <= 0 || prerequisites == null) {
             return false;
@@ -60,6 +60,66 @@ class Solution {
             });
         });
         
+        return ret;
+    }
+}
+
+class Solution2 {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (numCourses <= 0 || prerequisites == null) {
+            return false;
+        }
+        
+        Map<Integer, List<Integer>> graph = buildGraph(numCourses, prerequisites);
+        Set<Integer> visited = new HashSet<>();
+        
+        for (int i = 0; i < numCourses; i++) {
+            if (dfs(i, graph, visited) == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    private boolean dfs(int node, Map<Integer, List<Integer>> graph, Set<Integer> visited) {
+        return dfsHelper(node, graph, visited, new HashSet<>());
+    }
+    
+    private boolean dfsHelper(int node, Map<Integer, List<Integer>> graph, Set<Integer> visited, Set<Integer> visitedTmp) {
+        if (visited.contains(node)) {
+            return true;
+        }
+
+        visitedTmp.add(node);
+        
+        for (Integer neighbor : graph.get(node)) {
+            if (visitedTmp.contains(neighbor)) {
+                return false;
+            } else {
+                if (dfsHelper(neighbor, graph, visited, visitedTmp) == false) {
+                    return false;
+                }
+            }
+        }
+        
+        visitedTmp.remove(node);
+        visited.add(node);
+        
+        return true;
+    }
+    
+    private Map<Integer, List<Integer>> buildGraph(int n, int[][] prerequisites) {
+        Map<Integer, List<Integer>> ret = new HashMap<>();
+        
+        for (int i = 0; i < n; i++) {
+            ret.put(i, new LinkedList<>());
+        }
+        
+        for (int[] edge : prerequisites) {
+            ret.get(edge[1]).add(edge[0]);
+        }
+
         return ret;
     }
 }

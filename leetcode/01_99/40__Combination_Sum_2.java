@@ -25,17 +25,14 @@ class Solution {
             result.add(new ArrayList<>(comb));
         }
         
-        int j = i;
-        
-        while(j < candidates.length) {
+        for (int j = i; j < candidates.length; j++) {
+            if (j > i && candidates[j] == candidates[j - 1]) {
+                continue;
+            }
+            
             comb.add(candidates[j]);
             dfs(result, comb, candidates, j + 1, target - candidates[j]);
             comb.remove(comb.size() - 1);
-            
-            while(j < candidates.length && candidates[j] == candidates[i]) {
-                j++;
-            }
-            i = j;
         }
     }
 }

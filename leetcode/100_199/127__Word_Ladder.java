@@ -1,4 +1,4 @@
-class Solution {
+ class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if (wordList == null || wordList.isEmpty() || wordList.indexOf(endWord) == -1) {
             return 0;
