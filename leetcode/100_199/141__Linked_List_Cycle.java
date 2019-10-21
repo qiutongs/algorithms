@@ -17,19 +17,18 @@ public class Solution {
         if (head == null) {
             return false;
         }
-
-        ListNode slow = head;
-        ListNode fast = head;
-
-        do {
+        
+        ListNode slow = head, fast = head;
+        
+        while(fast != null && fast.next != null) {
             slow = slow.next;
-            fast = fast.next == null? fast.next : fast.next.next;
-
-            if (fast == slow && fast != null) {
+            fast = fast.next.next;
+            
+            if (fast == slow) {
                 return true;
             }
-        } while(fast != null);
-
+        }
+        
         return false;
     }
 }

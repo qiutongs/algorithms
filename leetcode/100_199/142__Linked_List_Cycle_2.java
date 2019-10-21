@@ -21,24 +21,29 @@ public class Solution {
         if (head == null) {
             return null;
         }
-
-        ListNode slow = head;
-        ListNode fast = head;
-
-        do {
+        
+        ListNode slow = head, fast = head;
+        
+        while(fast != null && fast.next != null) {
             slow = slow.next;
-            fast = fast.next == null? fast.next : fast.next.next;
-
-            if (fast == slow && fast != null) {
-                slow = head;
-                while (slow != fast) {
-                    slow = slow.next;
-                    fast = fast.next;
-                }
-                return slow;
+            fast = fast.next.next;
+            
+            if (fast == slow) {
+                break;
             }
-        } while(fast != null);
-
-        return null;
+        }
+        
+        if (fast == null || fast.next == null) {
+            return null;
+        }
+        
+        slow = head;
+        
+        while(slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        
+        return slow;
     }
 }
