@@ -6,20 +6,42 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-class Solution {
+class Solution1 {
     public ListNode swapPairs(ListNode head) {
-        if (head == null) {
-            return null;
-        }
-        
-        if (head.next == null) {
+        if (head == null || head.next == null) {
             return head;
         }
         
-        ListNode newHead = head.next;
-        ListNode tmpNext = newHead.next;
-        newHead.next = head;
-        head.next = swapPairs(tmpNext);
-        return newHead;
+        ListNode n2 = head.next;
+        ListNode n3 = n2.next;
+        n2.next = head;
+        head.next = swapPairs(n3);
+        return n2;
+    }
+}
+
+class Solution2 {
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        
+        ListNode first = head, second = head.next;
+        ListNode prev = dummy;
+        
+        while(first != null && second != null) {
+            first.next = second.next;
+            second.next = first;
+            prev.next = second;
+
+            prev = first;
+            first = first.next;
+            second = first == null ? null : first.next;
+        }
+        
+        return dummy.next;
     }
 }

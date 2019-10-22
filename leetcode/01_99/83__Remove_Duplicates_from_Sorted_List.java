@@ -38,39 +38,14 @@ class Solution2 {
             return null;
         }
 
-        ListNode tail = head, curNode = head;
+        ListNode cur = head;
 
-        while(curNode != null) {
-            int curVal = curNode.val;
-            do {
-                curNode = curNode.next;
-            } while (curNode != null && curNode.val == curVal);
-
-            tail.next = curNode;
-            tail = curNode;
-        }
-
-        return head;
-    }
-}
-
-class Solution3 {
-    public ListNode deleteDuplicates(ListNode head) {
-        if (head == null) {
-            return null;
-        }
-
-        ListNode curNode = head;
-
-        while(curNode != null) {
-            ListNode nextDiffNode = curNode.next;
-
-            while(nextDiffNode != null && nextDiffNode.val == curNode.val) {
-                nextDiffNode = nextDiffNode.next;
+        while(cur.next != null) {
+            if (cur.val == cur.next.val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next; 
             }
-
-            curNode.next = nextDiffNode;
-            curNode = nextDiffNode;
         }
 
         return head;

@@ -10,6 +10,7 @@ class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
+        
         ListNode prev = dummy;
         ListNode cur = head;
         
@@ -35,18 +36,16 @@ class Solution {
     }
     
     private ListNode getKthNode(ListNode prev, int k) {
-        ListNode kIter = prev;
-            
         for (int i = 0; i < k; i++) {
-            if (kIter != null) {
-                kIter = kIter.next;
-            } else {
+            if (prev == null) {
                 return null;
             }
+            prev = prev.next;
         }
-        return kIter;
+        return prev;
     }
     
+    // end is exclusive
     private void reverse(ListNode head, ListNode end) {
         ListNode prev = head;
         ListNode cur = head.next;

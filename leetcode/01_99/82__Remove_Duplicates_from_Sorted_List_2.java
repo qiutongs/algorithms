@@ -12,29 +12,27 @@ class Solution {
             return null;
         }
 
-        ListNode curNode = head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        
+        ListNode prev = dummy;
+        ListNode cur = head;
 
-        ListNode dummyHead = new ListNode(0);
-        ListNode tail = dummyHead;
-
-        while(curNode != null) {
-            ListNode nextDiffNode = curNode.next;
-
-            while(nextDiffNode != null && nextDiffNode.val == curNode.val) {
-                nextDiffNode = nextDiffNode.next;
+        while(cur != null) {
+            ListNode n = cur.next;
+            while(n != null && n.val == cur.val) {
+                n = n.next;
             }
-
-            // If next diff is adjacent, then curNode is a valid one.
-            if (curNode.next == nextDiffNode) {
-                tail.next = curNode;
-                tail = curNode;
+            
+            if (n == cur.next) {
+                prev = cur;
+                cur = cur.next;
+            } else {
+                prev.next = n;
+                cur = n;
             }
-
-            curNode = nextDiffNode;
         }
 
-        tail.next = null;
-
-        return dummyHead.next;
+        return dummy.next;
     }
 }

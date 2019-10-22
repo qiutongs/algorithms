@@ -8,37 +8,27 @@
  */
 class Solution1 {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        // Initialize a dummy head for convinience.
-        // The real head will be "dummyHead.next".
-        ListNode dummyHead = new ListNode(0), tail = dummyHead;
-
-        // Choose the smaller of element of two lists as next one.
+        ListNode dummyHead = new ListNode(0);
+        ListNode tail = dummyHead;
+        
         while(l1 != null && l2 != null) {
-            ListNode nextNode = null;
             if (l1.val <= l2.val) {
-                nextNode = l1;
+                tail.next = l1;
                 l1 = l1.next;
             } else {
-                nextNode = l2;
+                tail.next = l2;
                 l2 = l2.next;
             }
-
-            tail.next = nextNode;
-            tail = nextNode;
+            tail = tail.next;
+        }
+        
+        if (l1 != null) {
+            tail.next = l1;
+        } else if (l2 != null) {
+            tail.next = l2;
         }
 
-        // Handle left over list.
-        ListNode leftNode = l1 == null ? l2 : l1;
-
-        while(leftNode != null) {
-            tail.next = leftNode;
-            tail = leftNode;
-            leftNode = leftNode.next;
-        }
-
-        ListNode head = dummyHead.next;
-        dummyHead = null;
-        return head;
+        return dummyHead.next;
     }
 }
 
