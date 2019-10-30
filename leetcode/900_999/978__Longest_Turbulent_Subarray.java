@@ -40,49 +40,36 @@ class Solution1
     }
 }
 
-/*
-DP
-*/
-class Solution2
-{
-    public int maxTurbulenceSize(int[] A)
-    {
-        if (A == null || A.length == 0)
-        {
+// DP
+class Solution {
+    public int maxTurbulenceSize(int[] A) {
+        if (A == null || A.length == 0) {
             return 0;
         }
-
+        
         int longestUpHere = 1;
         int ret = 1;
-
-        for (int i = 1; i < A.length; i++)
-        {
-            if (isTurbulent(A, i))
-            {
+        
+        for (int i = 1; i < A.length; i++) {
+            if (isTurbulent(A, i)) {
                 longestUpHere += 1;
-            }
-            else
-            {
+            } else {
                 longestUpHere = A[i] == A[i - 1] ? 1 : 2;
             }
-
+            
             ret = Math.max(ret, longestUpHere);
         }
-
+        
         return ret;
     }
-
+    
     // i >= 1
-    private boolean isTurbulent(int[] A, int i)
-    {
-        if (i == 1)
-        {
+    private boolean isTurbulent(int[] A, int i) {
+        if (i == 1) {
             return A[i] != A[i - 1];
-        }
-        else
-        {
+        } else {
             return (A[i] > A[i - 1] && A[i - 1] < A[i - 2])
-                   || (A[i] < A[i - 1] && A[i - 1] > A[i - 2]);
+                || (A[i] < A[i - 1] && A[i - 1] > A[i - 2]);
         }
     }
 }

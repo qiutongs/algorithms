@@ -4,46 +4,44 @@ Time: O(n) average, O(n^2) worst
 https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array-set-2-expected-linear-time/
 */
 class Solution {
-    
-    private static Random rand = new Random();
+    private final Random rand = new Random();
     
     public int findKthLargest(int[] nums, int k) {
-        return findKthLargestHelper(nums, k, 0, nums.length - 1);
+        return helper(nums, 0, nums.length - 1, k);
     }
     
-    private int findKthLargestHelper(int[] nums, int k, int s, int e) {
-        if (s == e) {
-            return nums[s];
+    private int helper(int[] nums, int l, int r, int k) {
+        if (l == r) {
+            return nums[l];
         }
         
-        // Randomly generate a pivot between s and e.
-        int pivotIndex = rand.nextInt(e - s + 1) + s;
+        int mid = partition(nums, l, r);
+        // ordinal of mid
+        int midO = r - mid + 1;
         
-        // Track the index that is firstly greater than or equal to pivot
-        int firstGEIndex = s;
+        if (k < midO) {
+            return helper(nums, mid + 1, r, k);
+        } else if (k > midO) {
+            return helper(nums, l, mid - 1, k - midO);
+        } else {
+            return nums[mid];
+        }
+    }
+    
+    private int partition(int[] nums, int l, int r) {
+        int p = rand.nextInt(r - l + 1) + l;
+        swap(nums, p, r);
         
-        // Swap the pivotIndex with the last element.
-        swap(nums, pivotIndex, e);
-        
-        // Standard partition algorithm.
-        for (int i = s; i < e; i++) {
-            if (nums[i] < nums[e]) {
-                swap(nums, i, firstGEIndex);
-                firstGEIndex++;
+        int j = l;
+        for (int i = l; i < r; i++) {
+            if (nums[i] < nums[r]) {
+                swap(nums, i, j);
+                j++;
             }
         }
         
-        int lengthOfGE = e - firstGEIndex + 1;
-        
-        if (lengthOfGE == k) {
-            return nums[e];
-        } else if (lengthOfGE > k) {
-            // Note: the boundary must be careful to make sure it reduces in each recursion.
-            // For example, it will be dead loop if from firstGEIndex to e
-            return findKthLargestHelper(nums, k, firstGEIndex, e - 1);
-        } else {
-            return findKthLargestHelper(nums, k - lengthOfGE, s, firstGEIndex - 1);
-        }
+        swap(nums, j, r);
+        return j;
     }
     
     private void swap(int[] nums, int i, int j) {
