@@ -36,17 +36,17 @@ https://en.wikipedia.org/wiki/Dutch_national_flag_problem
 */
 class Solution2 {
     public void sortColors(int[] nums) {
-        int lastZero = -1, firstTwo = nums.length;
+        int l = 0, r = nums.length - 1;
 
         int i = 0;
-        while( i < firstTwo ) {
+        while( i <= r ) {
             if (nums[i] == 0) {
-                lastZero++;
-                swap(nums, i, lastZero);
+                swap(nums, i, l);
+                l++;
                 i++;
             } else if (nums[i] == 2) {
-                firstTwo--;
-                swap(nums, i, firstTwo);
+                swap(nums, i, r);
+                r--;
             } else {
                 i++;
             }

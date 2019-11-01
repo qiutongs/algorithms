@@ -2,35 +2,29 @@
  * Maintain a min heap with size k
  * add takes O(logks)
  */
-class KthLargest
-{
+class KthLargest {
 
-    private PriorityQueue<Integer> pq;
+    private PriorityQueue<Integer> pq = new PriorityQueue<>();
     private int k;
-
-    public KthLargest(int k, int[] nums)
-    {
-        this.pq = new PriorityQueue<Integer>(k);
+    
+    public KthLargest(int k, int[] nums) {
         this.k = k;
-
-        for (int i = 0; i < k && i < nums.length; i++)
-        {
+        
+        Arrays.sort(nums);
+        
+        for (int i = Math.max(nums.length - k, 0); i < nums.length; i++) {
             pq.offer(nums[i]);
         }
-
-        for (int i = k; i < nums.length; i++)
-        {
-            add(nums[i]);
-        }
     }
-
-    public int add(int val)
-    {
-
-        if (val > pq.peek())
-        {
-            pq.poll();
+    
+    public int add(int val) {
+        if (pq.size() < k) {
             pq.offer(val);
+        } else {
+            if (val > pq.peek()) {
+                pq.poll();
+                pq.offer(val);
+            }
         }
 
         return pq.peek();

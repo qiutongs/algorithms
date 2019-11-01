@@ -1,30 +1,21 @@
 class Solution {
     public void rotate(int[][] matrix) {
         int n = matrix.length;
-        int depth = n >> 1;
-
-        // For each depth...
-        for (int i = 0; i < depth; i++) {
-            // For each row...
-            for (int j = 0; j < n - i * 2 - 1; j++) {
-                // Rotate cycle at i, i + j.
-                rotateCycle(matrix, i, i + j);
-            }
+        int maxDepth = n / 2;
+        
+        for (int d = 0; d < maxDepth; d++) {
+            iterate(matrix, d, n - 2 * d);
         }
     }
-
-    private void rotateCycle(int[][] matrix, int i, int j) {
-        int n = matrix.length;
-
-        // (i, j) is up left.
-        int tmp = matrix[i][j];
-        // (n-1-j, i) is bottom left.
-        matrix[i][j] = matrix[n-1-j][i];
-        // (n-1-i, n-1-j) is bottom right.
-        matrix[n-1-j][i] = matrix[n-1-i][n-1-j];
-        // (j, n-1-i) is up right.
-        matrix[n-1-i][n-1-j] = matrix[j][n-1-i];
-
-        matrix[j][n-1-i] = tmp;
+    
+    private void iterate(int[][] matrix, int x1, int n) {
+        int x2 = x1 + n - 1;
+        for (int i = 0; i < n - 1; i++) {
+            int tmp = matrix[x1][x1 + i];
+            matrix[x1][x1 + i] = matrix[x2 - i][x1];
+            matrix[x2 - i][x1] = matrix[x2][x2 - i];
+            matrix[x2][x2 - i] = matrix[x1 + i][x2];
+            matrix[x1 + i][x2] = tmp;
+        }
     }
 }
