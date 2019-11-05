@@ -1,50 +1,63 @@
-class Solution {
+class Solution1 {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         if (arr == null || arr.length == 0) {
             return Collections.emptyList();
         }
         
-        List<Integer> ret = new ArrayList<>(k);
+        Deque<Integer> ret = new LinkedList<>();
         
-        int r = firstGE(arr, x);
-        int l = r - 1;
+        int index = Arrays.binarySearch(arr, x);
+        // Now index is at the one >= x
+        index = index < 0 ? - index - 1 : index;
         
+        int l = index - 1, r = index;
+        // Because k <= arr.length, l and r cannot be both out of boundary
         for (int i = 0; i < k; i++) {
-            if (r >= arr.length) {
-                ret.add(arr[l]);
-                l--;
-            } else if (l < 0) {
-                ret.add(arr[r]);
-                r++;
+            if (r >= arr.length || (l >= 0 && x - arr[l] <= arr[r] - x)) {
+                ret.addFirst(arr[l--]);
             } else {
-                if (x - arr[l] <= arr[r] - x) {
-                    ret.add(arr[l]);
-                    l--;
-                } else {
-                    ret.add(arr[r]);
-                    r++;
-                }
+                ret.addLast(arr[r++]);
             }
         }
         
-        Collections.sort(ret);
+        return (List<Integer>)ret;
+    }
+}
+
+class Solution2 {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        if (arr == null || arr.length == 0) {
+            return Collections.emptyList();
+        }
         
-        return ret;
+        Deque<Integer> ret = new LinkedList<>();
+        
+        int index = binarySearch(arr, x);
+        int l = index - 1, r = index;
+        // Because k <= arr.length, l and r cannot be both out of boundary
+        for (int i = 0; i < k; i++) {
+            if (r >= arr.length || (l >= 0 && x - arr[l] <= arr[r] - x)) {
+                ret.addFirst(arr[l--]);
+            } else {
+                ret.addLast(arr[r++]);
+            }
+        }
+        
+        return (List<Integer>)ret;
     }
     
-    private int firstGE(int[] arr, int x) {
+    private int binarySearch(int[] arr, int x) {
         int l = 0, r = arr.length - 1;
-        
         while(l <= r) {
             int mid = (l + r) / 2;
-            
-            if (x <= arr[mid]) {
+            if (x < arr[mid]) {
                 r = mid - 1;
-            } else {
+            } else if (x > arr[mid]) {
                 l = mid + 1;
+            } else {
+                return mid;
             }
         }
-        
         return l;
     }
 }

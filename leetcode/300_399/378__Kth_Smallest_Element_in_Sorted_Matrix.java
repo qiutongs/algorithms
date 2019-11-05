@@ -7,81 +7,35 @@ import javafx.util.Pair;
  */
 class Solution {
     public int kthSmallest(int[][] matrix, int k) {
-        if (matrix == null || matrix.length == 0) {
-            return 0;
-        }
-        
         int n = matrix.length;
+        boolean[][] visited = new boolean[n][n];
         
-        // Min heap: track potential small values.
-        PriorityQueue<Node> pq = new PriorityQueue<>();
+        PriorityQueue<Point> heap = new PriorityQueue<>((p1, p2) -> p1.val - p2.val);
+        heap.add(new Point(0, 0, matrix[0][0]));
+        visited[0][0] = true;
         
-        // To prevent duplicate postion.
-        Set<Node> visitedNodes = new HashSet<>();
-        
-        // Initialize the heap with the first element which is smallest.
-        Node smallestNode = new Node(0, 0, matrix[0][0]);
-        pq.offer(smallestNode);
-        visitedNodes.add(smallestNode);
-        
-        // Iterate until k - 1 small elements are found.
-        while(k > 1) {
-            Node minNode = pq.poll();
-            int i = minNode.pos.getKey();
-            int j = minNode.pos.getValue();
-            
-            Node newNode = null;
-
-            // Add right element to heap.
-            if (j + 1 < n) {
-                newNode = new Node(i, j + 1, matrix[i][j + 1]);
-                
-                if (!visitedNodes.contains(newNode)) {
-                    pq.offer(newNode);
-                    visitedNodes.add(newNode);
-                }
+        for (int i = 1; i < k; i++) {
+            Point min = heap.remove();
+            if (min.i + 1 < n && visited[min.i + 1][min.j] == false) {
+                visited[min.i + 1][min.j] = true;
+                heap.add(new Point(min.i + 1, min.j, matrix[min.i + 1][min.j]));
             }
-            
-            // Add below element to heap.
-            if (i + 1 < n) {
-                newNode = new Node(i + 1, j, matrix[i + 1][j]);
-                
-                if (!visitedNodes.contains(newNode)) {
-                    pq.offer(newNode);
-                    visitedNodes.add(newNode);
-                }
+            if (min.j + 1 < n && visited[min.i][min.j + 1] == false) {
+                visited[min.i][min.j + 1] = true;
+                heap.add(new Point(min.i, min.j + 1, matrix[min.i][min.j + 1]));
             }
-
-            k--;
         }
-        
-        // The next smallest element is the kth.
-        return pq.peek().val;
+        return heap.peek().val;
     }
-    
-    private class Node implements Comparable<Node> {
-        Pair<Integer, Integer> pos;
+
+    private class Point {
+        int i;
+        int j;
         int val;
-        
-        Node(int i, int j, int val) {
-            this.pos = new Pair<>(i, j);
+        Point(int i, int j, int val) {
+            this.i = i;
+            this.j = j;
             this.val = val;
-        }
-        
-        // Comparsion is based on value.
-        public int compareTo(Node other) {
-            Integer thisVal = val, otherVal = other.val;
-            return thisVal.compareTo(otherVal);
-        }
-        
-        // Hash code is based on the pair of integers;
-        public int hashCode() {
-            return pos.hashCode();
-        }
-        
-        // Equal is based on the pair of integers;
-        public boolean equals(Object other) {
-            return pos.equals(((Node)other).pos);
         }
     }
 }

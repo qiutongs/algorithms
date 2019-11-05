@@ -61,3 +61,32 @@ class Solution {
         return dummy.next;
     }
 }
+
+class Solution2 {
+    public Node copyRandomList(Node head) {
+        if (head == null) {
+            return null;
+        }
+        
+        Node ret = new Node(head.val, null, null);
+        Node tail = ret;
+        HashMap<Node, Node> hashMap = new HashMap<>();
+        hashMap.put(head, ret);
+        
+        Node cur = head.next;
+        while(cur != null) {
+            tail.next = new Node(cur.val, null, null);
+            tail = tail.next;
+            hashMap.put(cur, tail);
+            cur = cur.next;
+        }
+        
+        cur = head;
+        while(cur != null) {
+            hashMap.get(cur).random = hashMap.get(cur.random);
+            cur = cur.next;
+        }
+        
+        return ret;
+    }
+}
