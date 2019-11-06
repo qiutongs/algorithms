@@ -5,39 +5,38 @@ class Solution {
             return;
         }
         
-        // step 1: start from right, find the first number < its right
-        // 1, 3, 2 -> 1
-        int firstSmallIndex = nums.length - 2;
-        for (; firstSmallIndex >= 0; firstSmallIndex--) {
-            if (nums[firstSmallIndex] < nums[firstSmallIndex + 1]) {
+        int i = nums.length - 2;
+        for (; i >= 0; i--) {
+            if (nums[i] < nums[i + 1]) {
                 break;
             }
         }
         
-        // step 2: start from right, find the first number > firstSmall; swap them
-        // 1, 3, 2 -> 2
-        // 2, 3, 1
-        if (firstSmallIndex >= 0) {
-            for ( int firstLargeIndex = nums.length - 1; firstLargeIndex > firstSmallIndex; firstLargeIndex--) {
-                if (nums[firstLargeIndex] > nums[firstSmallIndex]) {
-                    swap(nums, firstSmallIndex, firstLargeIndex);
+        if (i >= 0) {
+            int j = nums.length - 1;
+            for (; j > i; j--) {
+                if (nums[j] > nums[i]) {
                     break;
                 }
             }
+
+            swap(nums, i, j);
         }
-        
-        // step 3: reverse all the numbers right to first small
-        int l = firstSmallIndex + 1, r = nums.length - 1;
-        while(l < r) {
-            swap(nums, l, r);
-            l++;
-            r--;
+
+        reverse(nums, i + 1, nums.length - 1);
+    }
+    
+    private void reverse(int[] nums, int i, int j) {
+        while(i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
         }
     }
     
     private void swap(int[] nums, int i, int j) {
-            int tmp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = tmp;
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
     }
 }
