@@ -1,4 +1,4 @@
-class Solution1 {
+class Solution {
     public String multiply(String num1, String num2) {
         List<Integer> ret = new ArrayList<>();
         int[] n1 = toIntArray(num1);
@@ -32,17 +32,16 @@ class Solution1 {
     
     private void addToRet(List<Integer> ret, int[] product, int index) {
         int carry = 0;
-        int j = 0;
-        for (int i = index; i < ret.size() && j < product.length; i++, j++) {
-            int sum = ret.get(i) + product[j] + carry;
-            ret.set(i, sum % 10);
+        for (int i = index, j = 0; j < product.length; i++, j++) {
+            int sum = 0;
+            if (i < ret.size()) {
+                sum = ret.get(i) + product[j] + carry;
+                ret.set(i, sum % 10);
+            } else {
+                sum = product[j] + carry;
+                ret.add(sum % 10);
+            }
             carry = sum / 10;
-        }
-        while(j < product.length) {
-            int sum = product[j] + carry;
-            ret.add(sum % 10);
-            carry = sum / 10;
-            j++;
         }
         if (carry > 0) {
             ret.add(carry);
@@ -50,23 +49,25 @@ class Solution1 {
     }
     
     private int[] toIntArray(String s) {
-        int[] ret = new int[s.length()];
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = (int)(s.charAt(ret.length - i - 1) - '0');
+        int l = s.length();
+        int[] ret = new int[l];
+        for (int i = 0; i < l; i++) {
+            ret[i] = (int)(s.charAt(l - i - 1) - '0');
         }
         return ret;
     }
     
     private String toString(List<Integer> list) {
-        char[] cArr = new char[list.size()];
-        for (int i = 0; i < cArr.length; i++) {
-            cArr[i] = (char)(list.get(cArr.length - i - 1) + '0');
+        int l = list.size();
+        char[] ret = new char[l];
+        for (int i = 0; i < list.size(); i++) {
+            ret[i] = (char)(list.get(l - i - 1) + '0');
         }
-        return new String(cArr);
+        return new String(ret);
     }
 }
 
-class Solution2 {
+class Solution {
     public String multiply(String num1, String num2) {
         List<Character> ret = new ArrayList<>();
         num1 = reverse(num1);

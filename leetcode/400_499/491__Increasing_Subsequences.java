@@ -1,37 +1,40 @@
-class Solution1 {
+class Solution {
     public List<List<Integer>> findSubsequences(int[] nums) {
-        return findSubHelper(nums, nums.length)
-                    .stream()
-                    .distinct()
-                    .filter(sublist -> sublist.size() >= 2)
-                    .collect(Collectors.toList());
+        if (nums == null || nums.length == 0) {
+            return Collections.emptyList();
+        }
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(nums, 0, new ArrayList<>(), ret);
+        return ret;
     }
     
-    private List<List<Integer>> findSubHelper(int[] nums, int n) {
-        List<List<Integer>> result = new ArrayList<>();
-
-        if (n == 0) {
-            result.add(Collections.emptyList());
-            return result; 
+    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
+        if (curList.size() >= 2) {
+            ret.add(new ArrayList<>(curList));
         }
-        
-        List<List<Integer>> subResult = findSubHelper(nums, n - 1);
-        
-        for (List<Integer> sublist : subResult) {
-            if (sublist.isEmpty() || nums[n - 1] >= sublist.get(sublist.size() - 1)) {
-                List<Integer> newSublist = new ArrayList<>(sublist);
-                newSublist.add(nums[n - 1]);
-                result.add(newSublist);
+        for (int i = offset; i < nums.length; i++) {
+            if (indexOf(nums, offset, i - 1, nums[i]) >= 0) {
+                continue;
             }
-            
-            result.add(sublist);
+            if (curList.isEmpty() || curList.get(curList.size() - 1) <= nums[i]) {
+                curList.add(nums[i]);
+                dfs(nums, i + 1, curList, ret);
+                curList.remove(curList.size() - 1);
+            }
         }
-        
-        return result;
+    }
+    
+    private int indexOf(int[] nums, int l, int r, int target) {
+        for (int i = l; i <= r; i++) {
+            if (nums[i] == target) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 
-class Solution2 {
+class Solution {
     public List<List<Integer>> findSubsequences(int[] nums) {
         if (nums == null || nums.length == 0) {
             return Collections.emptyList();

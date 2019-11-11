@@ -9,14 +9,13 @@ class Solution {
         if (nums.length == 0) {
             return 0;
         }
-
-        int lastNotDup = 0;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[lastNotDup]) {
-                lastNotDup++;
-                nums[lastNotDup] = nums[i];
+        int l = 1;
+        for (int r = 1; r < nums.length; r++) {
+            if (nums[r] > nums[r - 1]) {
+                nums[l] = nums[r];
+                l++;
             }
         }
-        return lastNotDup + 1;
+        return l;
     }
 }

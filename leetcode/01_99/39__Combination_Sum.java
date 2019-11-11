@@ -1,31 +1,24 @@
-/* DFS
- */
 class Solution {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         if (candidates == null || candidates.length == 0) {
             return Collections.emptyList();
         }
-        
-        List<List<Integer>> result = new ArrayList<>();
-        
-        dfs(result, new ArrayList<>(), candidates, 0, target);
-        
-        return result;
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(candidates, 0, target, new ArrayList<>(), ret);
+        return ret;
     }
     
-    private void dfs(List<List<Integer>> result, List<Integer> comb, int[] candidates, int i, int target) {
+    private void dfs(int[] candidates, int offset, int target, List<Integer> curList, List<List<Integer>> ret) {
+        if (target == 0) {
+            ret.add(new ArrayList<>(curList));
+        }
         if (target < 0) {
             return;
         }
-        
-        if (target == 0) {
-            result.add(new ArrayList<>(comb));
-        }
-        
-        for (int j = i; j < candidates.length; j++) {
-            comb.add(candidates[j]);
-            dfs(result, comb, candidates, j, target - candidates[j]);
-            comb.remove(comb.size() - 1);
+        for (int i = offset; i < candidates.length; i++) {
+            curList.add(candidates[i]);
+            dfs(candidates, i, target - candidates[i], curList, ret);
+            curList.remove(curList.size() - 1);
         }
     }
 }

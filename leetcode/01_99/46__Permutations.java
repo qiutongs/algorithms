@@ -1,30 +1,24 @@
-/* 
-  DFS
- */
 class Solution {
     public List<List<Integer>> permute(int[] nums) {
         if (nums == null || nums.length == 0) {
             return Collections.emptyList();
         }
-        
-        List<List<Integer>> result = new ArrayList<>();
-        
-        dfs(result, new ArrayList<>(), nums, 0);
-        
-        return result;
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(nums, 0, new ArrayList<>(), ret);
+        return ret;
     }
     
-    private void dfs(List<List<Integer>> result, List<Integer> curPermu, int[] nums, int i) {
-        if (i == nums.length) {
-            result.add(new ArrayList<>(curPermu));
+    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
+        if (offset == nums.length) {
+            ret.add(new ArrayList<>(curList));
         }
         
-        for (int j = i; j < nums.length; j++) {
-            swap(nums, j, i);
-            curPermu.add(nums[i]);
-            dfs(result, curPermu, nums, i + 1);
-            curPermu.remove(curPermu.size() - 1);
-            swap(nums, j, i);
+        for (int i = offset; i < nums.length; i++) {
+            swap(nums, i, offset);
+            curList.add(nums[offset]);
+            dfs(nums, offset + 1, curList, ret);
+            curList.remove(curList.size() - 1);
+            swap(nums, i, offset);
         }
     }
     

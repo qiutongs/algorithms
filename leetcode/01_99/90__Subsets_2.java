@@ -1,3 +1,28 @@
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return Collections.emptyList();
+        }
+        Arrays.sort(nums);
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(nums, 0, new ArrayList<>(), ret);
+        return ret;
+    }
+    
+    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
+        ret.add(new ArrayList<>(curList));
+
+        for (int i = offset; i < nums.length; i++) {
+            if (i > offset && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            curList.add(nums[i]);
+            dfs(nums, i + 1, curList, ret);
+            curList.remove(curList.size() - 1);
+        }
+    }
+}
+
 /*
 Idea: Sort and select next move carefully.
 After sort, say there is a subarray of duplicated value: 2,2,2,2,2,2...
@@ -5,7 +30,7 @@ The output should only include ONCE '2', '22', '222', '2222', ....
 1. if not select 2 on current index, then never, go to next different value
 2. if select 2 on current index, we can go to next value (maybe duplicate)
 */
-class Solution1 {
+class Solution {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         List<List<Integer>> result = new ArrayList<>(1 << nums.length);
 
@@ -36,38 +61,4 @@ class Solution1 {
     }
 }
 
-/*
-  DFS: 
- */
-class Solution2 {
-    public List<List<Integer>> subsetsWithDup(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return Collections.emptyList();
-        }
-        
-        List<List<Integer>> result = new ArrayList<>();
-        
-        Arrays.sort(nums);
-        
-        dfs(result, new ArrayList<>(), nums, 0);
-        
-        return result;
-    }
-    
-    private void dfs(List<List<Integer>> result, List<Integer> curSet, int[] nums, int i) {
-        result.add(new ArrayList<>(curSet));
-        
-        int j = i;
-        
-        while(j < nums.length) {
-            curSet.add(nums[j]);
-            dfs(result, curSet, nums, j + 1);
-            curSet.remove(curSet.size() - 1);
-            
-            while(j < nums.length && nums[j] == nums[i]) {
-                j++;
-            }
-            i = j;
-        }
-    }
-}
+

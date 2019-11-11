@@ -1,38 +1,32 @@
 /*
- * Note: I think it is not necessarily needs to be positive
+ * Note: this can work even input is not positive, not like Combination Sum 1
  */
 class Solution {
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         if (candidates == null || candidates.length == 0) {
             return Collections.emptyList();
         }
-        
-        List<List<Integer>> result = new ArrayList<>();
-        
         Arrays.sort(candidates);
-        
-        dfs(result, new ArrayList<>(), candidates, 0, target);
-        
-        return result;
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(candidates, 0, target, new ArrayList<>(), ret);
+        return ret;
     }
     
-    private void dfs(List<List<Integer>> result, List<Integer> comb, int[] candidates, int i, int target) {
+    private void dfs(int[] candidates, int offset, int target, List<Integer> curList, List<List<Integer>> ret) {
+        if (target == 0) {
+            ret.add(new ArrayList<>(curList));
+        }
+        // critical for performance, not for correctness
         if (target < 0) {
             return;
         }
-        
-        if (target == 0) {
-            result.add(new ArrayList<>(comb));
-        }
-        
-        for (int j = i; j < candidates.length; j++) {
-            if (j > i && candidates[j] == candidates[j - 1]) {
+        for (int i = offset; i < candidates.length; i++) {
+            if (i > offset && candidates[i] == candidates[i - 1]) {
                 continue;
             }
-            
-            comb.add(candidates[j]);
-            dfs(result, comb, candidates, j + 1, target - candidates[j]);
-            comb.remove(comb.size() - 1);
+            curList.add(candidates[i]);
+            dfs(candidates, i + 1, target - candidates[i], curList, ret);
+            curList.remove(curList.size() - 1);
         }
     }
 }

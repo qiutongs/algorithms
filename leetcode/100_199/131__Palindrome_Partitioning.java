@@ -3,25 +3,22 @@ class Solution {
         if (s == null || s.length() == 0) {
             return Collections.emptyList();
         }
-        
-        List<List<String>> result = new ArrayList<>();
-        
-        dfs(result, new ArrayList<>(), s, 0);
-        
-        return result;
+        List<List<String>> ret = new ArrayList<>();
+        dfs(s, 0, new ArrayList<>(), ret);
+        return ret;
     }
     
-    private void dfs(List<List<String>> result, List<String> partition, String s, int i) {
-        if (i == s.length()) {
-            result.add(new ArrayList<>(partition));
+    private void dfs(String s, int offset, List<String> curList, List<List<String>> ret) {
+        if (offset == s.length()) {
+            ret.add(new ArrayList<>(curList));
             return;
         }
         
-        for (int j = i; j < s.length(); j++) {
-            if (isPalindrome(s, i, j)) {
-                partition.add(s.substring(i, j + 1));
-                dfs(result, partition, s, j + 1);
-                partition.remove(partition.size() - 1);
+        for (int i = offset; i < s.length(); i++) {
+            if (isPalindrome(s, offset, i)) {
+                curList.add(s.substring(offset, i + 1));
+                dfs(s, i + 1, curList, ret);
+                curList.remove(curList.size() - 1);
             }
         }
     }

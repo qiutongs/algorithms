@@ -1,16 +1,14 @@
-class Solution1 {
+class Solution {
     public int[] twoSum(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
             return nums;
         }
-        
         int[] ret = new int[2];
-        
-        HashMap<Integer, Integer> map = new HashMap<>();
+        HashMap<Integer, Integer> viMap = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            Integer index = map.get(target - nums[i]);
+            Integer index = viMap.get(target - nums[i]);
             if (index == null) {
-                map.put(nums[i], i);
+                viMap.put(nums[i], i);
             } else {
                 ret[0] = index;
                 ret[1] = i;
@@ -21,42 +19,73 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return nums;
+        }
+        int[] ret = new int[2];
+        HashMap<Integer, List<Integer>> vilMap = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            vilMap.putIfAbsent(nums[i], new ArrayList<>());
+            vilMap.get(nums[i]).add(i);
+        }
+        for (int i = 0; i < nums.length; i++) {
+            List<Integer> list = vilMap.get(target - nums[i]);
+            if (list != null) {
+                if (nums[i] != target - nums[i]) {
+                    ret[0] = i;
+                    ret[1] = list.get(0);
+                    break;
+                } else if (list.size() > 1) {
+                    ret[0] = i;
+                    ret[1] = list.get(1);
+                    break;
+                }
+            }
+        }
+        return ret;
+    }
+}
+
+class Solution {
     public int[] twoSum(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
             return nums;
         }
         
         int[] ret = new int[2];
+        Data[] datas = toDatas(nums);
+        Arrays.sort(datas, (d1, d2) -> d1.val - d2.val);
         
-        Node[] nodes = new Node[nums.length];
-        
-        for (int i = 0; i < nums.length; i++) {
-            nodes[i] = new Node(nums[i], i);
-        }
-        
-        Arrays.sort(nodes, (n1, n2) -> n1.val - n2.val);
-        
-        int l = 0, r = nodes.length - 1;
+        int l = 0, r = datas.length - 1;
         while(l < r) {
-            int sum = nodes[l].val + nodes[r].val;
+            int sum = datas[l].val + datas[r].val;
             if (sum < target) {
                 l++;
             } else if (sum > target) {
                 r--;
             } else {
-                ret[0] = nodes[l].index;
-                ret[1] = nodes[r].index;
+                ret[0] = datas[l].index;
+                ret[1] = datas[r].index;
                 break;
             }
         }
         return ret;
     }
     
-    private class Node {
+    private Data[] toDatas(int[] nums) {
+        Data[] ret = new Data[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            ret[i] = new Data(nums[i], i);
+        }
+        return ret;
+    }
+    
+    private class Data {
         int val;
         int index;
-        Node(int val, int index) {
+        Data(int val, int index) {
             this.val = val;
             this.index = index;
         }

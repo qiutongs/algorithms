@@ -1,12 +1,90 @@
-/*
-https://www.geeksforgeeks.org/power-set/
-https://www.geeksforgeeks.org/recursive-program-to-generate-power-set/
-*/
+// https://www.geeksforgeeks.org/power-set/
+// https://www.geeksforgeeks.org/recursive-program-to-generate-power-set/
 
-/*
-Most straightforward. Iterate all the 2^n subset.
-*/
-class Solution1 {
+// DFS
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        if (nums == null) {
+            return Collections.emptyList();
+        }
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(nums, 0, new ArrayList<>(), ret);
+        return ret;
+    }
+    
+    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
+        ret.add(new ArrayList<>(curList));
+        
+        for (int i = offset; i < nums.length; i++) {
+            curList.add(nums[i]);
+            dfs(nums, i + 1, curList, ret);
+            curList.remove(curList.size() - 1);
+        }
+    }
+}
+
+// BFS
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        if (nums == null) {
+            return Collections.emptyList();
+        }
+        List<List<Integer>> ret = new ArrayList<>();
+        Queue<List<Integer>> q = new LinkedList<>();
+        q.add(new ArrayList<>());
+        
+        while(q.isEmpty() == false) {
+            List<Integer> node = q.poll();
+            ret.add(node);
+            int offset = node.isEmpty() ? 0 : indexOf(nums, node.get(node.size() - 1)) + 1;
+            for (int i = offset; i < nums.length; i++) {
+                List<Integer> neighbor = new ArrayList<>(node);
+                neighbor.add(nums[i]);
+                q.offer(neighbor);
+            }
+        }
+        return ret;
+    }
+    
+    private int indexOf(int[] nums, int target) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == target) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+
+// Div-and-Conq
+// Note: this can be converted to iterative approach easily.
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        return subsets(nums, nums.length);
+    }
+
+    private List<List<Integer>> subsets(int[] nums, int n) {
+        List<List<Integer>> ret = new ArrayList<>();
+
+        if (n == 0) {
+            result.add(new ArrayList<>());
+            return result;
+        }
+
+        List<List<Integer>> subSubsets = subsets(nums, n - 1);
+        ret.addAll(subSubsets);
+        for (List<Integer> subSubset : subSubsets) {
+            List<Integer> newSubset = new ArrayList<>(subSubset);
+            newSubset.add(nums[n-1]);
+            ret.add(newSubset);
+        }
+
+        return ret;
+    }
+}
+
+// Most straightforward. Iterate all the 2^n subset.
+class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         int n = nums.length;
 
@@ -26,44 +104,8 @@ class Solution1 {
     }
 }
 
-/*
-Solve the subsets of first n-1 and add the nth element or not.
-This is BFS essentially.
-
-Note: this can be converted to iterative approach easily.
-*/
-class Solution2 {
-    public List<List<Integer>> subsets(int[] nums) {
-        return subsets(nums, nums.length);
-    }
-
-    private List<List<Integer>> subsets(int[] nums, int n) {
-        List<List<Integer>> result = new ArrayList<>();
-
-        if (n == 0) {
-            result.add(new ArrayList<>());
-            return result;
-        }
-
-        List<List<Integer>> subSubsets = subsets(nums, n - 1);
-
-        // Not include the current num.
-        result.addAll(subSubsets);
-
-        for (List<Integer> subSubset : subSubsets) {
-            List<Integer> newSubset = new ArrayList<>(subSubset);
-            newSubset.add(nums[n-1]);
-            result.add(newSubset);
-        }
-
-        return result;
-    }
-}
-
-/*
-Backtrack, pick one element or not
-*/
-class Solution3 {
+// pick one element or not
+class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> result = new ArrayList<>(1 << nums.length);
         backtrack(new ArrayList<>(), nums.length - 1, nums, result);
@@ -86,71 +128,3 @@ class Solution3 {
     }
 }
 
-/* 
-   DFS, one step at a time. Iterate on a full stack tree
-
-   [1, 4] = [1] -> [1] -> [1] -> [1, 4]
- */
-class Solution4 {
-    public List<List<Integer>> subsets(int[] nums) {
-        if (nums == null) {
-            return Collections.emptyList();
-        }
-        
-        List<List<Integer>> results = new ArrayList<>();
-        List<Integer> curSet = new ArrayList<>();
-        
-        Arrays.sort(nums);
-        
-        dfs(results, curSet, nums, 0);
-        
-        return results;
-    }
-    
-    private void dfs(List<List<Integer>> results, List<Integer> curSet, int[] nums, int i) {
-        if (i == nums.length) {
-            results.add(new ArrayList<>(curSet));
-            return;
-        }
-        
-        // select
-        curSet.add(nums[i]);
-        dfs(results, curSet, nums, i + 1);
-        curSet.remove(curSet.size() - 1);
-        
-        // not select
-        dfs(results, curSet, nums, i + 1);
-    }
-}
-
-/* 
-   DFS, mutiple steps compared to solution 4. Faster than solution 4.
-
-   [1, 4] = [1] -> [1, 4]
- */
-class Solution5 {
-    public List<List<Integer>> subsets(int[] nums) {
-        if (nums == null) {
-            return Collections.emptyList();
-        }
-        
-        List<List<Integer>> results = new ArrayList<>();
-        List<Integer> curSet = new ArrayList<>();
-        
-        Arrays.sort(nums);
-        
-        dfs(results, curSet, nums, 0);
-        
-        return results;
-    }
-    
-    private void dfs(List<List<Integer>> results, List<Integer> curSet, int[] nums, int i) {
-        results.add(new ArrayList<>(curSet));
-        
-        for (int j = i; j < nums.length; j++) {
-            curSet.add(nums[j]);
-            dfs(results, curSet, nums, j + 1);
-            curSet.remove(curSet.size() - 1);
-        }
-    }
-}

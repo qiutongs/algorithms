@@ -1,31 +1,21 @@
-/*
-Similar to question 1. The additional logic is to handle twice values.
-*/
 class Solution {
     public int removeDuplicates(int[] nums) {
-        if (nums.length == 0) {
+        if (nums == null) {
             return 0;
         }
-
-        int lastNotDup = 0;
-        boolean twice = false;
-
-        for (int i = 1; i < nums.length; i++) {
-            if ( nums[i] != nums[lastNotDup] ) {
-                /* If found a new value. */
-
-                lastNotDup++;
-                nums[lastNotDup] = nums[i];
-                twice = false;
-            } else if ( !twice && (nums[i] == nums[lastNotDup]) ) {
-                /* If found an old value but only apreared once. */
-
-                lastNotDup++;
-                nums[lastNotDup] = nums[i];
-                twice = true;
+        if (nums.length <= 2) {
+            return nums.length;
+        }
+        int l = 2;
+        int prev = nums[1], pprev = nums[0];
+        for (int r = 2; r < nums.length; r++) {
+            if (nums[r] > prev || nums[r] > pprev) {
+                pprev = prev;
+                prev = nums[r];
+                nums[l] = nums[r];
+                l++;
             }
         }
-
-        return lastNotDup + 1;
+        return l;
     }
 }

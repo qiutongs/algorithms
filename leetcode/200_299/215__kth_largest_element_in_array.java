@@ -3,7 +3,7 @@ Time: O(n) average, O(n^2) worst
 
 https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array-set-2-expected-linear-time/
 */
-class Solution1 {
+class Solution {
     private final Random rand = new Random();
     
     public int findKthLargest(int[] nums, int k) {
@@ -49,7 +49,7 @@ class Solution1 {
         nums[j] = tmp;
     }
 }
-class Solution2 {
+class Solution {
     private final Random rand = new Random();
     
     public int findKthLargest(int[] nums, int k) {
@@ -94,5 +94,52 @@ class Solution2 {
         int tmp = nums[i];
         nums[i] = nums[j];
         nums[j] = tmp;
+    }
+}
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        k = nums.length - k + 1;
+        int l = getMin(nums), r = getMax(nums);
+        while(l <= r) {
+            int mid = (l + r) / 2;
+            int[] counts = new int[2];
+            getCount(nums, mid, counts);
+            
+            if (k <= counts[0]) {
+                r = mid - 1;
+            } else if (k <= counts[0] + counts[1]) {
+                return mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        throw new RuntimeException();
+    }
+    
+    private void getCount(int[] nums, int target, int[] counts) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < target) {
+                counts[0]++;
+            } else if (nums[i] == target) {
+                counts[1]++;
+            }
+        }
+    }
+    
+    private int getMax(int[] nums) {
+        int ret = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            ret = Math.max(ret, nums[i]);
+        }
+        return ret;
+    }
+    
+    private int getMin(int[] nums) {
+        int ret = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            ret = Math.min(ret, nums[i]);
+        }
+        return ret;
     }
 }

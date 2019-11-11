@@ -1,4 +1,24 @@
-class Solution1 {
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(n, k, new ArrayList<>(), ret);
+        return ret; 
+    }
+    
+    private void dfs(int n, int k, List<Integer> curList, List<List<Integer>> ret) {
+        if (k == 0) {
+            ret.add(new ArrayList<>(curList));
+            return;
+        }
+        for (int i = n; i >= 1; i--) {
+            curList.add(i);
+            dfs(i - 1, k - 1, curList, ret);
+            curList.remove(curList.size() - 1);
+        }
+    }
+}
+
+class Solution {
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> result = new LinkedList<>();
 
@@ -23,32 +43,5 @@ class Solution1 {
         curList.remove(curList.size()-1);
         //not select n
         backtrack(result, curList, n-1, k);
-    }
-}
-
-class Solution2 {
-    public List<List<Integer>> combine(int n, int k) {
-        List<List<Integer>> result = new ArrayList<>();
-        
-        dfs(result, new ArrayList<>(), n, k);
-        
-        return result; 
-    }
-    
-    private void dfs(List<List<Integer>> result, List<Integer> comb, int n, int k) {
-        if (k == 0) {
-            result.add(new ArrayList<>(comb));
-            return;
-        }
-        
-        if (n == 0) {
-            return;
-        }
-        
-        for (int i = n; i >= 1; i--) {
-            comb.add(i);
-            dfs(result, comb, i - 1, k - 1);
-            comb.remove(comb.size() - 1);
-        }
     }
 }

@@ -1,58 +1,42 @@
-/* DFS: similar to Permutations 1
- */
 class Solution {
     public List<List<Integer>> permuteUnique(int[] nums) {
         if (nums == null || nums.length == 0) {
             return Collections.emptyList();
         }
-        
-        List<List<Integer>> result = new ArrayList<>();
-        
-        Arrays.sort(nums);
-        
-        dfs(result, new ArrayList<>(), nums, 0);
-        
-        return result;
+        List<List<Integer>> ret = new ArrayList<>();
+        dfs(nums, 0, new ArrayList<>(), ret);
+        return ret;
     }
     
-    private void dfs(List<List<Integer>> result, List<Integer> curPermu, int[] nums, int i) {
-        if (i == nums.length) {
-            result.add(new ArrayList<>(curPermu));
+    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
+        if (offset == nums.length) {
+            ret.add(new ArrayList<>(curList));
         }
         
-        int j = i, curIndex = i;
-        
-        while(j < nums.length) {
-            // select index j
-            int selectedNum = nums[j];
-            curPermu.add(selectedNum);
-            // shift right by one to keep sorted
-            shiftRight(nums, i, j - 1);
-            
-            dfs(result, curPermu, nums, i + 1);
-            
-            // backtrack: shift left and reset
-            shiftLeft(nums, i + 1, j);
-            nums[j] = selectedNum;
-            curPermu.remove(curPermu.size() - 1);
-            
-            // next different num
-            while(j < nums.length && nums[curIndex] == nums[j]) {
-                j++;
+        for (int i = offset; i < nums.length; i++) {
+            if (indexOf(nums, offset, i - 1, nums[i]) >= 0) {
+                continue;
             }
-            curIndex = j;
+            swap(nums, i, offset);
+            curList.add(nums[offset]);
+            dfs(nums, offset + 1, curList, ret);
+            curList.remove(curList.size() - 1);
+            swap(nums, i, offset);
         }
     }
     
-    private void shiftRight(int[] nums, int i, int j) {
-        for (int k = j + 1; k > i; k--) {
-            nums[k] = nums[k - 1];
-        }
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
     }
     
-    private void shiftLeft(int[] nums, int i, int j) {
-        for (int k = i - 1; k < j; k++) {
-            nums[k] = nums[k + 1];
+    private int indexOf(int[] nums, int l, int r, int target) {
+        for (int i = l; i <= r; i++) {
+            if (nums[i] == target) {
+                return i;
+            }
         }
+        return -1;
     }
 }

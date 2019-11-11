@@ -21,7 +21,7 @@ class Solution {
         
         return ret;
     }
-    
+    // two sum with all unique pairs
     private List<List<Integer>> twoSum(int[] nums, int r, int target) {
         List<List<Integer>> ret = new LinkedList<>();
         

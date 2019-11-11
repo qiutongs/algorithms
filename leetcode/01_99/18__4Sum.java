@@ -1,4 +1,4 @@
-class Solution1 {
+class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
         if (nums == null || nums.length < 4) {
             return Collections.emptyList();
@@ -69,7 +69,7 @@ class Solution1 {
 }
 
 // http://www.lifeincode.net/programming/leetcode-two-sum-3-sum-3-sum-closest-and-4-sum-java/
-class Solution2 {
+class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) { 
         Set<List<Integer>> ret = new HashSet<>();
         HashMap<Integer, List<Pair>> valPairs = buildMap(nums);

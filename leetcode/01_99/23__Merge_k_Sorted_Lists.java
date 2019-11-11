@@ -10,7 +10,7 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
         ListNode dummy = new ListNode(0);
         ListNode tail = dummy;
