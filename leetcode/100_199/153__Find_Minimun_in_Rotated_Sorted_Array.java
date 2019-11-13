@@ -1,4 +1,4 @@
-class Solution1 {
+class Solution {
     public int findMin(int[] nums) {
         int l = 0, r = nums.length - 1;
         int lastNum = nums[r];
@@ -18,7 +18,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public int findMin(int[] nums) {
         int l = 0, r = nums.length - 1;
         int firstNum = nums[l];

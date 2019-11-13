@@ -1,62 +1,47 @@
-// stackoverflow
-class Solution1 {
-    public double myPow(double x, int n) {
-        if (n >= 0) {
-            return helper(x, n);
-        } else {
-            return 1.0 / helper(x, -n);
-        }
-    }
-    
-    private double helper(double x, int n) {
-        if (n == 0) {
-            return 1;
-        }
-        
-        return helper(x, n - 1) * x;
-    }
-}
-
-// Time limit exceed
-class Solution2 {
-    public double myPow(double x, int n) {
-        double ret = 1.0;
-        int absN = Math.abs(n);
-        
-        while(absN > 0) {
-            ret *= x;
-            absN--;
-        }
-        
-        if (n >= 0) {
-            return ret;
-        } else {
-            return 1.0 / ret;
-        }
-    }
-}
-
-// pass: binary search
 class Solution {
     public double myPow(double x, int n) {
-        if (n >= 0) {
-            return helper(x, n);
+        // avoid overflow when n is Integer.MIN_VALUE
+        long nl = (long)n;
+        if (nl < 0) {
+            return 1.0 / pow(x, -nl);
         } else {
-            return 1.0 / helper(x, -n);
+            return pow(x, nl);
         }
     }
     
-    private double helper(double x, int n) {
+    private double pow(double x, long n) {
         if (n == 0) {
-            return 1;
+            return 1.0;
         }
-        
-        double squrRoot = helper(x, n / 2);
-        
+        double tmp = pow(x, n / 2);
         if (n % 2 == 0) {
-            return squrRoot * squrRoot;
+            return tmp * tmp;
         } else {
-            return squrRoot * squrRoot * x;
+            return tmp * tmp * x;
         }
+    }
+}
+
+class Solution {
+    public double myPow(double x, int n) {
+        // avoid overflow when n is Integer.MIN_VALUE
+        long nl = (long)n;
+        if (nl < 0) {
+            return 1.0 / pow(x, -nl);
+        } else {
+            return pow(x, nl);
+        }
+    }
+    
+    private double pow(double x, long n) {
+        double ret = 1.0;
+        while(n > 0) {
+            if ((n & 1) == 1) {
+                ret *= x;
+            }
+            x = x * x;
+            n >>>= 1;
+        }
+        return ret;
     }
 }

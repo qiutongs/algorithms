@@ -1,4 +1,55 @@
-class Solution1 {
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int[] ret = {-1, -1};
+        
+        if (nums == null || nums.length == 0) {
+            return ret;
+        }
+        
+        int firstIndex = bsLeft(nums, target);
+        int lastIndex = bsRight(nums, target);
+        
+        if (firstIndex < nums.length && nums[firstIndex] == target) {
+            ret[0] = firstIndex;
+        }
+        
+        if (lastIndex >= 0 && nums[lastIndex] == target) {
+            ret[1] = lastIndex;
+        }
+        
+        return ret;
+    }
+    
+    private int bsLeft(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while(l <= r) {
+            int mid = (l + r) / 2;
+            
+            if (nums[mid] >= target) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+    
+    private int bsRight(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while(l <= r) {
+            int mid = (l + r) / 2;
+            
+            if (nums[mid] <= target) {
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return r;
+    }
+}
+
+class Solution {
     public int[] searchRange(int[] nums, int target) {
         int[] ret = {-1, -1};
         
@@ -52,7 +103,7 @@ class Solution1 {
 - binary search left most
 - binary search right most
 */
-class Solution2 {
+class Solution {
     enum Mode {
         SEARCH,
         LEFT_BOUND,

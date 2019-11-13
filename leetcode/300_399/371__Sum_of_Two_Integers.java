@@ -1,4 +1,17 @@
 /*
+ * a + b = a ^ b + ( a & b << 1 )
+ */
+class Solution2 {
+    public int getSum(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        
+        return getSum(a ^ b, (a & b) << 1 );
+    }
+}
+
+/*
  * My first naive thought but incorrect because it uses '+'
  */
 class Solution1 {
@@ -15,18 +28,5 @@ class Solution1 {
         }
         
         return (int)ret;
-    }
-}
-
-/*
- * a + b = a ^ b + ( a & b << 1 )
- */
-class Solution2 {
-    public int getSum(int a, int b) {
-        if (b == 0) {
-            return a;
-        }
-        
-        return getSum(a ^ b, (a & b) << 1 );
     }
 }

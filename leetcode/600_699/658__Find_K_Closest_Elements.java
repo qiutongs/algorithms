@@ -1,4 +1,4 @@
-class Solution1 {
+class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         if (arr == null || arr.length == 0) {
             return Collections.emptyList();
@@ -24,7 +24,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         if (arr == null || arr.length == 0) {
             return Collections.emptyList();

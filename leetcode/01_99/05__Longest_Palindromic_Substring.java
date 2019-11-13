@@ -1,8 +1,102 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        int[] ret = {0, 0};
+        for (int i = 0; i < s.length() - 1; i++) {
+            int[] tmp = getLongestPalin(s, i, i);
+            ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
+            
+            if (s.charAt(i) == s.charAt(i + 1)) {
+                tmp = getLongestPalin(s, i, i + 1);
+                ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
+            }
+        }
+        return s.substring(ret[0], ret[1] + 1);
+    }
+    
+    private int[] getLongestPalin(String s, int l, int r) {
+        while(l - 1 >= 0 && r + 1 < s.length() && s.charAt(l - 1) == s.charAt(r + 1)) {
+            l--;
+            r++;
+        }
+        int[] ret = {l, r};
+        return ret;
+    }
+}
+
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.isEmpty()) {
+            return "";
+        }
+        int[] ret = {0, 0};
+        for (int i = 0; i < s.length() - 1; i++) {
+            int[] tmp = getLongestPalin(s, i, i);
+            ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
+            
+            tmp = getLongestPalin(s, i, i + 1);
+            ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
+        }
+        return s.substring(ret[0], ret[1] + 1);
+    }
+    
+    private int[] getLongestPalin(String s, int l, int r) {
+        int[] ret = {0, 0};
+        while(l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            ret[0] = l;
+            ret[1] = r;
+            l--;
+            r++;
+        }
+        return ret;
+    }
+}
+
+/*
+ * Interval DP
+ */
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() <= 1) {
+            return s;
+        }
+        
+        int n = s.length();
+        boolean[][] isPalin = new boolean[n][n];
+        int maxLeft = 0, maxRight = 0;
+        
+        // Iterate on small interval to big
+        for (int interval = 1; interval <= n; interval++) {
+            // Iterate on each starting point
+            for (int start = 0; start + interval - 1 < n; start++) {
+                int end = start + interval - 1;
+                
+                if (interval == 1) {
+                    isPalin[start][end] = true;
+                } else if (interval == 2) {
+                    isPalin[start][end] = s.charAt(start) == s.charAt(end);
+                } else {
+                    isPalin[start][end] = isPalin[start + 1][end - 1] && s.charAt(start) == s.charAt(end);
+                }
+                
+                if (isPalin[start][end] && end - start > maxRight - maxLeft) {
+                    maxRight = end;
+                    maxLeft = start;
+                }
+            }
+        }
+        
+        return s.substring(maxLeft, maxRight + 1);
+    }
+}
+
 /* 
  * Improvement on naive solution.
  * O(n ^ 2)
  */
-class Solution1 {
+class Solution {
     public String longestPalindrome(String s) {
         if (s == null || s.length() <= 1) {
             return s;
@@ -49,44 +143,6 @@ class Solution1 {
         }
         
         return halfLength;
-    }
-}
-
-/*
- * Interval DP
- */
-class Solution2 {
-    public String longestPalindrome(String s) {
-        if (s == null || s.length() <= 1) {
-            return s;
-        }
-        
-        int n = s.length();
-        boolean[][] isPalin = new boolean[n][n];
-        int maxLeft = 0, maxRight = 0;
-        
-        // Iterate on small interval to big
-        for (int interval = 1; interval <= n; interval++) {
-            // Iterate on each starting point
-            for (int start = 0; start + interval - 1 < n; start++) {
-                int end = start + interval - 1;
-                
-                if (interval == 1) {
-                    isPalin[start][end] = true;
-                } else if (interval == 2) {
-                    isPalin[start][end] = s.charAt(start) == s.charAt(end);
-                } else {
-                    isPalin[start][end] = isPalin[start + 1][end - 1] && s.charAt(start) == s.charAt(end);
-                }
-                
-                if (isPalin[start][end] && end - start > maxRight - maxLeft) {
-                    maxRight = end;
-                    maxLeft = start;
-                }
-            }
-        }
-        
-        return s.substring(maxLeft, maxRight + 1);
     }
 }
 

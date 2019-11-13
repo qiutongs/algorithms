@@ -1,4 +1,4 @@
-class Solution1 {
+class Solution {
     public int peakIndexInMountainArray(int[] A) {
         int l = 0, r = A.length - 1;
         
@@ -16,7 +16,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public int peakIndexInMountainArray(int[] A) {
         int l = 0, r = A.length - 1;
         
