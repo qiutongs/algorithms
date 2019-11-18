@@ -4,27 +4,25 @@ class Solution {
             return Collections.emptyList();
         }
         List<List<Integer>> ret = new ArrayList<>();
-        dfs(nums, 0, new ArrayList<>(), ret);
+        dfs(nums, new boolean[nums.length], new ArrayList<>(), ret);
         return ret;
     }
     
-    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
-        if (offset == nums.length) {
+    private void dfs(int[] nums, boolean[] visited, List<Integer> curList, List<List<Integer>> ret) {
+        if (curList.size() == nums.length) {
             ret.add(new ArrayList<>(curList));
+            return;
         }
         
-        for (int i = offset; i < nums.length; i++) {
-            swap(nums, i, offset);
-            curList.add(nums[offset]);
-            dfs(nums, offset + 1, curList, ret);
+        for (int i = 0; i < nums.length; i++) { 
+            if (visited[i]) {
+                continue;
+            }
+            visited[i] = true;
+            curList.add(nums[i]);
+            dfs(nums, visited, curList, ret);
             curList.remove(curList.size() - 1);
-            swap(nums, i, offset);
+            visited[i] = false;
         }
-    }
-    
-    private void swap(int[] nums, int i, int j) {
-        int tmp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = tmp;
     }
 }
