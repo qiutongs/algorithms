@@ -12,39 +12,29 @@ class Solution {
         if (root == null) {
             return Collections.emptyList();
         }
-        
         List<List<Integer>> ret = new ArrayList<>();
-        
         Queue<TreeNode> queue = new LinkedList<>();
-        int levelId = 1;
-        
-        queue.add(root);
-        
+        queue.offer(root);
+        int level = 1;
         while(queue.isEmpty() == false) {
-            List<Integer> level = new ArrayList<>();
-            
             int size = queue.size();
+            List<Integer> row = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                TreeNode node = queue.remove();
-                level.add(node.val);
-                
+                TreeNode node = queue.poll();
+                row.add(node.val);
                 if (node.left != null) {
-                    queue.add(node.left);
+                    queue.offer(node.left);
                 }
-                
                 if (node.right != null) {
-                    queue.add(node.right);
+                    queue.offer(node.right);
                 }
             }
-            
-            if (levelId % 2 == 0) {
-                Collections.reverse(level);
+            if (level % 2 == 0) {
+                Collections.reverse(row);
             }
-            
-            ret.add(level);
-            levelId++;
+            ret.add(row);
+            level++;
         }
-        
         return ret;
     }
 }
