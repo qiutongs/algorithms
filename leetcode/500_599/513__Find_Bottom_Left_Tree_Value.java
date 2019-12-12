@@ -8,32 +8,58 @@
  * }
  */
 
-class RowInfo{
-    int val;
-    int level;
-    RowInfo(int v, int l){val = v; level = l;}
-}
 class Solution {
+    private final NodeInfo NULL_NODE = new NodeInfo(0, -1);
+    
     public int findBottomLeftValue(TreeNode root) {
-        return findBottomLeftValue(root, 0).val;
+        if (root == null) {
+            return 0;
+        }
+        return helper(root, 0).val;
     }
     
-    private RowInfo findBottomLeftValue(TreeNode cur, int level){
-        if (cur == null) return null;
-        
-        RowInfo leftRowInfo = findBottomLeftValue(cur.left, level+1);
-        RowInfo rightRowInfo = findBottomLeftValue(cur.right, level+1);
-        
-        if (leftRowInfo == null && rightRowInfo == null){
-            return new RowInfo(cur.val, level);
-        } else if (leftRowInfo != null && rightRowInfo != null){
-            if (leftRowInfo.level >= rightRowInfo.level){
-                return leftRowInfo;
-            } else {
-                return rightRowInfo;
-            }
-        } else {
-            return leftRowInfo == null? rightRowInfo : leftRowInfo;
+    private NodeInfo helper(TreeNode node, int level){
+        if (node == null) {
+            return NULL_NODE;
         }
+        if (node.left == null && node.right == null) {
+            return new NodeInfo(node.val, level);
+        }
+        NodeInfo leftInfo = helper(node.left, level + 1);
+        NodeInfo rightInfo = helper(node.right, level + 1);
+        return leftInfo.level >= rightInfo.level ? leftInfo : rightInfo;
+    }
+    
+    private class NodeInfo {
+        int val;
+        int level;
+        NodeInfo(int v, int l){
+            val = v; 
+            level = l;
+        }
+    }
+}
+
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int[] maxDepth = { -1 };
+        int[] ret = { 0 };
+        dfs(root, 0, maxDepth, ret);
+        return ret[0];
+    }
+    
+    private void dfs(TreeNode node, int level, int[] maxDepth, int[] ret) {
+        if (node == null) {
+            return;
+        }
+        if (level > maxDepth[0]) {
+            maxDepth[0] = level;
+            ret[0] = node.val;
+        }
+        dfs(node.left, level + 1, maxDepth, ret);
+        dfs(node.right, level + 1, maxDepth, ret);
     }
 }

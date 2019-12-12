@@ -22,16 +22,14 @@ class Solution {
             return null;
         }
         
-        if (root.left == null && root.right == null){
-            return root;
+        if (root.left != null) {
+            root.left.next = root.right;
         }
-        
-        root.left.next = root.right;
-        root.right.next = root.next == null ? null : root.next.left;
-
+        if (root.right != null) {
+            root.right.next = root.next == null ? null : root.next.left;
+        }
         connect(root.left);
         connect(root.right);
-        
         return root;
     }
 }

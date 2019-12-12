@@ -15,13 +15,15 @@ class Solution {
 
 class Solution {
     public int mySqrt(int x) {
-        double a = (double)x;
-        double x1 = a;
-        double tmp = x1;
-        do {
-            tmp = x1;
-            x1 = 0.5 * (x1 + a / x1);
-        } while((int)(tmp) > (int)(x1));
-        return (int)x1;
+        double xd = (double)x;
+        double ret = (double)x;
+        while(true) {
+            double next = 0.5 * (ret + xd / ret);
+            if ((int)next == (int)ret) {
+                break;
+            }
+            ret = next;
+        }
+        return (int)ret;
     }
 }

@@ -1,41 +1,32 @@
 class Solution {
     public List<List<Integer>> permuteUnique(int[] nums) {
         if (nums == null || nums.length == 0) {
-            return Collections.emptyList();
+            return Arrays.asList(Collections.emptyList());
         }
+        Arrays.sort(nums);
         List<List<Integer>> ret = new ArrayList<>();
-        dfs(nums, new boolean[nums.length], new ArrayList<>(), ret);
+        dfs(nums, new ArrayList<>(), new boolean[nums.length], ret);
         return ret;
     }
     
-    private void dfs(int[] nums, boolean[] visited, List<Integer> curList, List<List<Integer>> ret) {
+    private void dfs(int[] nums, List<Integer> curList, boolean[] visited, List<List<Integer>> ret) {
         if (curList.size() == nums.length) {
             ret.add(new ArrayList<>(curList));
             return;
         }
-        
-        for (int i = 0; i < nums.length; i++) { 
+        for (int i = 0; i < nums.length; i++) {
             if (visited[i]) {
                 continue;
             }
-            if (isDup(nums, 0, i - 1, nums[i], visited)) {
+            if (i > 0 && visited[i - 1] == false && nums[i] == nums[i - 1]) {
                 continue;
             }
             visited[i] = true;
             curList.add(nums[i]);
-            dfs(nums, visited, curList, ret);
+            dfs(nums, curList, visited, ret);
             curList.remove(curList.size() - 1);
             visited[i] = false;
         }
-    }
-    
-    private boolean isDup(int[] nums, int l, int r, int target, boolean[] visited) {
-        for (int i = l; i <= r; i++) {
-            if (nums[i] == target && visited[i] == false) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 

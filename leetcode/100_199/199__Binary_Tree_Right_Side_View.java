@@ -8,20 +8,25 @@
  * }
  */
 class Solution {
+    // Thelta(n)
+    // It has to go over all the nodes
     public List<Integer> rightSideView(TreeNode root) {
-        List<Integer> result = new ArrayList<>();
-        findRightSide(result, root, 0);
-        return result;
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        List<Integer> ret = new ArrayList<>();
+        helper(root, 1, ret);
+        return ret;
     }
     
-    private void findRightSide(List<Integer> result, TreeNode cur, int level){
-        if (cur == null) return;
-        
-        if (level == result.size()){
-            result.add(cur.val);
+    private void helper(TreeNode node, int level, List<Integer> ret) {
+        if (node == null) {
+            return;
         }
-        
-        findRightSide(result, cur.right, level + 1);
-        findRightSide(result, cur.left, level + 1);
+        if (level > ret.size()) {
+            ret.add(node.val);
+        }
+        helper(node.right, level + 1, ret);
+        helper(node.left, level + 1, ret);
     }
 }
