@@ -1,14 +1,10 @@
-/* Interval DP
- */
 class Solution {
     public int longestPalindromeSubseq(String s) {
         if (s == null || s.length() == 0) {
             return 0;
         }
-        
         int n = s.length();
         int[][] dp = new int[n][n];
-        
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 dp[i][j] = i == j ? 1 : 0;

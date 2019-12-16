@@ -1,27 +1,21 @@
-/*
-DP idea: O(n^2)
-
-compute LTS beginning at each index, start from last index
-(equivalent to ending at each index, start from first index)
-*/
-class Solution1 {
+// DP idea: O(n^2)
+class Solution {
     public int lengthOfLIS(int[] nums) {
-        if (nums.length == 0) {
+        if (nums == null || nums.length == 0) {
             return 0;
         }
-
-        int[] beginWithLIS = new int[nums.length];
-        Arrays.fill(beginWithLIS, 1);
-
-        for (int i = nums.length - 2; i >= 0; i--) {
-            for (int j = i + 1; j < nums.length; j++) {
-                if (nums[j] > nums[i]) {
-                    beginWithLIS[i] = Math.max(beginWithLIS[i], beginWithLIS[j] + 1);
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+        int ret = 1;
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
             }
+            ret = Math.max(ret, dp[i]);
         }
-
-        return Arrays.stream(beginWithLIS).max().getAsInt();
+        return ret;
     }
 }
 

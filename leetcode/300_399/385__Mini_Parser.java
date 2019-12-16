@@ -44,21 +44,20 @@ class Solution {
                 NestedInteger child = new NestedInteger();
                 container.add(child);
                 dfs(s, offset, child);
-            } else if (c == ',') {
+            } else if (Character.isDigit(c)) {
+                num = num == null ? 0 : num;
+                num = num * 10 + (int)(c - '0');
+            } else if (c == '-') {
+                sign = -1;
+            }
+            
+            if (c == ',' || offset[0] + 1 == s.length() || s.charAt(offset[0] + 1) == ']') {
                 if (num != null) {
                     container.add(new NestedInteger(sign * num));
                     num = null;
                     sign = 1;
                 }
-            } else if (c == '-') {
-                sign = -1;
-            } else {
-                num = num == null ? 0 : num;
-                num = num * 10 + (int)(c - '0');
             }
-        }
-        if (num != null) {
-            container.add(new NestedInteger(sign * num));
         }
     }
 }

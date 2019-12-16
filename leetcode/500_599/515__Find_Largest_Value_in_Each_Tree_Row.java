@@ -9,22 +9,24 @@
  */
 class Solution {
     public List<Integer> largestValues(TreeNode root) {
-        List<Integer> result = new ArrayList<>();
-        recurLargestValues(result, root, 0);
-        return result;
+        List<Integer> ret = new ArrayList<>();
+        dfs(root, 0, ret);
+        return ret;
     }
     
-    private void recurLargestValues(List<Integer> result, TreeNode cur, int level){
-        if (cur == null) return;
-        
-        if (level >= result.size()){
-            result.add(cur.val);
-        } else {
-            int curVal = result.get(level);
-            result.set(level, curVal > cur.val? curVal : cur.val );
+    private void dfs(TreeNode node, int level, List<Integer> ret){
+        if (node == null) {
+            return;
         }
         
-        recurLargestValues(result, cur.left, level + 1);
-        recurLargestValues(result, cur.right, level + 1);
+        if (level >= ret.size()){
+            ret.add(node.val);
+        } else {
+            int val = ret.get(level);
+            ret.set(level, val > node.val? val : node.val );
+        }
+        
+        dfs(node.left, level + 1, ret);
+        dfs(node.right, level + 1, ret);
     }
 }

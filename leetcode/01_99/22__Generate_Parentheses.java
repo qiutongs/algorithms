@@ -24,3 +24,25 @@ class Solution {
         } 
     }
 }
+
+class Solution {
+    private HashMap<Integer, List<String>> memo = new HashMap<>();
+    public List<String> generateParenthesis(int n) {
+        if (n == 0) {
+            return Arrays.asList("");
+        }
+        if (memo.containsKey(n)) {
+            return memo.get(n);
+        }
+        List<String> ret = new ArrayList<>();
+        for (int i = 0, j = n - 1; i < n; i++, j--) {
+            for (String s : generateParenthesis(i)) {
+                for (String t : generateParenthesis(j)) {
+                    ret.add("(" + s + ")" + t);
+                }
+            }
+        }
+        memo.put(n, ret);
+        return ret;
+    }
+}
