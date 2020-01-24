@@ -8,40 +8,35 @@ class Solution {
         }
         int m = board.length, n = board[0].length;
         boolean[][] visited = new boolean[m][n];
-        boolean[][] flipVisited = new boolean[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (board[i][j] == 'O' && visited[i][j] == false) {
-                    if (isSurrounded(board, i, j, visited)) {
-                        flip(board, i, j, flipVisited);
+                    List<Integer[]> points = new LinkedList<>();
+                    if (dfs(board, i, j, visited, points)) {
+                        flip(board, points);
                     }
                 }
             }
         }
     }
     
-    private boolean isSurrounded(char[][] board, int x, int y, boolean[][] visited) {
-        return dfs(board, x, y, visited, false);
-    }
-    
-    private void flip(char[][] board, int x, int y, boolean[][] visited) {
-        dfs(board, x, y, visited, true);
-    }
-    
-    private boolean dfs(char[][] board, int x, int y, boolean[][] visited, boolean flip) {
-        boolean ret = true;
-        
-        visited[x][y] = true;
-        if (flip) {
-            board[x][y] = 'X';
+    private void flip(char[][] board, List<Integer[]> points) {
+        for (Integer[] point : points) {
+            board[point[0]][point[1]] = 'X';
         }
+    }
+    
+    private boolean dfs(char[][] board, int x, int y, boolean[][] visited, List<Integer[]> points) {
+        points.add(new Integer[]{x, y}); 
+        visited[x][y] = true;
         
+        boolean ret = true;
         for (int i = 0; i < 4; i++) {
             int x1 = x + DELTA_X[i];
             int y1 = y + DELTA_Y[i];
             if (inbound(board, x1, y1)) {
                 if (visited[x1][y1] == false && board[x1][y1] == 'O') {
-                    if (dfs(board, x1, y1, visited, flip) == false) {
+                    if (dfs(board, x1, y1, visited, points) == false) {
                         ret = false;
                     }
                 }

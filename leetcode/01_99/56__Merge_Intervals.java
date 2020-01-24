@@ -5,25 +5,19 @@ class Solution {
         }
         List<int[]> ret = new ArrayList<>();
         Arrays.sort(intervals, (i1, i2) -> i1[0] - i2[0]);
-        
-        int[] cur = intervals[0].clone();
+        // To not modify original array: intervals[0].clone()
+        int[] cur = intervals[0];
         for (int i = 1; i < intervals.length; i++) {
-            if (isOverlap(cur, intervals[i])) {
-                merge(cur, intervals[i]);
+            // If overlap
+            if (cur[1] >= intervals[i][0]) {
+                // Merge
+                cur[1] = Math.max(cur[1], intervals[i][1]);
             } else {
                 ret.add(cur);
-                cur = intervals[i].clone();
+                cur = intervals[i];
             }
         }
         ret.add(cur);
         return ret.toArray(new int[0][]);
-    }
-    
-    private boolean isOverlap(int[] cur, int[] i) {
-        return i[0] <= cur[1];
-    }
-    
-    private void merge(int[] cur, int[] i) {
-        cur[1] = Math.max(cur[1], i[1]);
     }
 }

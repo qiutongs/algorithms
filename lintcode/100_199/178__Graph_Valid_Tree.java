@@ -1,4 +1,4 @@
-public class Solution1 {
+public class Solution {
     /**
      * @param n: An integer
      * @param edges: a list of undirected edges
@@ -8,58 +8,41 @@ public class Solution1 {
         if (n <= 0 || edges == null) {
             return false;
         }
-        
         // a tree with n nodes must have n - 1 edges
         if (edges.length != n - 1) {
             return false;
         }
         
-        int[][] graph = buildGraph(n, edges);
-        
-        boolean[] visited = new boolean[n];
-        Arrays.fill(visited, false);
-        
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(0);
-        visited[0] = true;
-        
-        int count = 1;
-        
-        while(queue.isEmpty() == false) {
-            int node = queue.remove();
-            
-            for (int i = 0; i < n; i++) {
-                if (visited[i] == false && graph[node][i] == 1) {
-                    queue.add(i);
-                    visited[neighbor] = true;
-                    count++;
-                }
-            }
-        }
-        
-        return count == n;
+        List<Integer>[] graph = buildGraph(n, edges);
+        int[] ret = {0};
+        dfs(graph, 0, new boolean[n], ret);
+        return ret[0] == n;
     }
     
-    // adjacent matrix
-    private int[][] buildGraph(int n, int[][] edges) {
-        int[][] graph = new int[n][n];
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                graph[i][j] = 0;
+    private void dfs(List<Integer>[] graph, int node, boolean[] visited, int[] ret) {
+        visited[node] = true;
+        ret[0]++;
+        for (Integer nb : graph[node]) {
+            if (visited[nb] == false) {
+                dfs(graph, nb, visited, ret);
             }
         }
-        
-        for (int[] edge : edges) {
-            graph[edge[0]][edge[1]] = 1;
-            graph[edge[1]][edge[0]] = 1;
+    }
+    
+    private List<Integer>[] buildGraph(int n, int[][] edges) {
+        List<Integer>[] graph = new LinkedList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new LinkedList<>();
         }
-        
+        for (int[] edge : edges) {
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
         return graph;
     }
 }
 
-public class Solution2 {
+public class Solution {
     /**
      * @param n: An integer
      * @param edges: a list of undirected edges

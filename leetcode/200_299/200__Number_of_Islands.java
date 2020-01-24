@@ -1,60 +1,4 @@
-class Solution1 {
-    public int numIslands(char[][] grid) {
-        if (grid == null || grid.length == 0) {
-            return 0;
-        }
-        
-        boolean[][] visited = new boolean[grid.length][grid[0].length];
-        
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                visited[i][j] = false;
-            }
-        }
-        
-        int ret = 0;
-        
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == '1' && visited[i][j] == false) {
-                    Integer[] point = {i, j};
-                    bfs(grid, visited, point);
-                    ret++;
-                }
-            }
-        }
-        
-        return ret;
-    }
-    
-    private void bfs(char[][] grid, boolean[][] visited, Integer[] point) {
-        Queue<Integer[]> queue = new LinkedList<>();
-        queue.add(point);
-        visited[point[0]][point[1]] = true;
-        
-        int[] deltaI = {0, 0, 1, -1};
-        int[] deltaJ = {1, -1, 0, 0};
-        
-        while(queue.isEmpty() == false) {
-            Integer[] p = queue.remove();
-            
-            for (int k = 0; k < 4; k++) {
-                Integer[] neighbor = {p[0] + deltaI[k], p[1] + deltaJ[k]};
-                
-                if (inBound(grid, neighbor) && grid[neighbor[0]][neighbor[1]] == '1' && visited[neighbor[0]][neighbor[1]] == false) {
-                    queue.add(neighbor);
-                    visited[neighbor[0]][neighbor[1]] = true;
-                }
-            }
-        }
-    }
-    
-    private boolean inBound(char[][] grid, Integer[] point) {
-        return point[0] >= 0 && point[0] < grid.length && point[1] >= 0 && point[1]< grid[0].length;
-    }
-}
-
-class Solution2 {
+class Solution {
     public int numIslands(char[][] grid) {
         if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) {
             return 0;
@@ -66,7 +10,6 @@ class Solution2 {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == '1' && visited[i][j] == false) {
-                    visited[i][j] = true;
                     dfs(grid, i, j, visited);
                     ret++;
                 }
@@ -77,19 +20,68 @@ class Solution2 {
     }
     
     private void dfs(char[][] grid, int x, int y, boolean[][] visited) {
-        int[] deltaX = {0, 1};
-        int[] deltaY = {1, 0};
-        for (int i = 0; i < 2; i++) {
-            int nextX = x + deltaX[i];
-            int nextY = y + deltaY[i];
-            if (inBound(grid, nextX, nextY) && visited[nextX][nextY] == false && grid[nextX][nextY] == '1') {
-                visited[nextX][nextY] = true;
-                dfs(grid, nextX, nextY, visited);
+        visited[x][y] = true;
+        
+        int[] deltaX = {0, 1, 0, -1};
+        int[] deltaY = {1, 0, -1, 0};
+        for (int i = 0; i < 4; i++) {
+            int x1 = x + deltaX[i];
+            int y1 = y + deltaY[i];
+            if (inBound(grid, x1, y1) && visited[x1][y1] == false && grid[x1][y1] == '1') {
+                dfs(grid, x1, y1, visited);
             }
         }
     }
     
     private boolean inBound(char[][] grid, int x, int y) {
         return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length;
+    }
+}
+
+class Solution {
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+
+        int ret = 0;
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1' && visited[i][j] == false) {
+                    bfs(grid, new Integer[]{i, j}, visited);
+                    ret++;
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    private void bfs(char[][] grid, Integer[] s, boolean[][] visited) {
+        Queue<Integer[]> queue = new LinkedList<>();
+        queue.add(s);
+        visited[s[0]][s[1]] = true;
+        
+        int[] deltaX = {0, 0, 1, -1};
+        int[] deltaY = {1, -1, 0, 0};
+        
+        while(queue.isEmpty() == false) {
+            Integer[] p = queue.remove();
+            
+            for (int k = 0; k < 4; k++) {
+                Integer[] p1 = {p[0] + deltaX[k], p[1] + deltaY[k]};
+                if (inBound(grid, p1) && grid[p1[0]][p1[1]] == '1' && visited[p1[0]][p1[1]] == false) {
+                    visited[p1[0]][p1[1]] = true;
+                    queue.add(p1);
+                }
+            }
+        }
+    }
+    
+    private boolean inBound(char[][] grid, Integer[] point) {
+        return point[0] >= 0 && point[0] < grid.length && point[1] >= 0 && point[1]< grid[0].length;
     }
 }

@@ -1,89 +1,50 @@
 class Solution {
     public void solveSudoku(char[][] board) {
-        dfs(board, 0, 0);
+        dfs(board, 0);
     }
     
-    private boolean dfs(char[][] board, int x, int y) {
-        if (x == 9) {
+    private boolean dfs(char[][] board, int pos) {
+        int n = board.length;
+        if (pos > (n - 1) * n + (n - 1)) {
             return true;
         }
         
-        int nextX = y + 1 < 9 ? x : x + 1;
-        int nextY = y + 1 < 9 ? y + 1 : 0;
-
-        if (board[x][y] == '.') {
-            for (int i = 1; i <= 9; i++) {
-                board[x][y] = (char)('0' + i);
-                
-                if (isValid(board, x, y)) {
-                    if (dfs(board, nextX, nextY)) {
-                        return true;
-                    }
-                }
-                
-                board[x][y] = '.';
-            }
-            
-            return false;
-        } else {
-            return dfs(board, nextX, nextY);
+        int x = pos / n, y = pos % n;
+        
+        if (board[x][y] != '.') {
+            return dfs(board, pos + 1);
         }
+        
+        for (int i = 1; i <= 9; i++) {
+            board[x][y] = (char)(i + '0');
+            if (isValid(board, x, y)) {
+                if (dfs(board, pos + 1)) {
+                    return true;
+                }
+            }
+        }
+        board[x][y] = '.';
+        return false;
     }
     
     private boolean isValid(char[][] board, int x, int y) {
-        int[] count = new int[9];
-
-        // row check
-        Arrays.fill(count, 0);
-        for (int i = 0; i < 9; i++) {
-            if (board[x][i] != '.') {
-                count[board[x][i] - '1']++;
-            }
-        }
-        
-        if (isValidCount(count) == false) {
-            return false;
-        }
-        
-        // column check
-        Arrays.fill(count, 0);
-        for (int i = 0; i < 9; i++) {
-            if (board[i][y] != '.') {
-                count[board[i][y] - '1']++;
-            }
-        }
-        
-        if (isValidCount(count) == false) {
-            return false;
-        }
-        
-        // sub-box check
-        Arrays.fill(count, 0);
-        int groupX = x / 3;
-        int groupY = y / 3;
-        
-        for (int i = groupX * 3; i < groupX * 3 + 3; i++) {
-            for (int j = groupY * 3; j < groupY * 3 + 3; j++) {
-                if (board[i][j] != '.') {
-                    count[board[i][j] - '1']++;
-                }
-            }
-        }
-        
-        if (isValidCount(count) == false) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private boolean isValidCount(int[] count) {
-        for (int i = 0; i < 9; i++) {
-            if (count[i] > 1) {
+        for (int i = 0; i < board.length; i++) {
+            if (i != x && board[i][y] == board[x][y]) {
                 return false;
             }
         }
-        
+        for (int i = 0; i < board[0].length; i++) {
+            if (i != y && board[x][i] == board[x][y]) {
+                return false;
+            }
+        }
+        for (int i = x - x % 3; i < x - x % 3 + 3; i++) {
+            for (int j = y - y % 3; j < y - y % 3 + 3; j++) {
+                if (i != x && j != y && board[i][j] == board[x][y]) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 }
