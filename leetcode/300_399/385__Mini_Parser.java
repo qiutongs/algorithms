@@ -37,27 +37,31 @@ class Solution {
     private void dfs(String s, int[] offset, NestedInteger container) {
         Integer num = null;
         int sign = 1;
-        for (; offset[0] < s.length() && s.charAt(offset[0]) != ']'; offset[0]++) {
+        for (; offset[0] < s.length(); offset[0]++) {
             char c = s.charAt(offset[0]);
             if (c == '[') {
                 offset[0]++;
                 NestedInteger child = new NestedInteger();
                 container.add(child);
                 dfs(s, offset, child);
+            } else if (c == ']') {
+                break;
             } else if (Character.isDigit(c)) {
                 num = num == null ? 0 : num;
                 num = num * 10 + (int)(c - '0');
             } else if (c == '-') {
                 sign = -1;
-            }
-            
-            if (c == ',' || offset[0] + 1 == s.length() || s.charAt(offset[0] + 1) == ']') {
+            } else if (c == ',') {
                 if (num != null) {
                     container.add(new NestedInteger(sign * num));
                     num = null;
                     sign = 1;
                 }
             }
+        }
+        
+        if (num != null) {
+            container.add(new NestedInteger(sign * num));
         }
     }
 }

@@ -8,25 +8,16 @@ class Solution {
         }
         
         int[] sortedNums = nums.clone();
-        
         Arrays.sort(sortedNums);
         
         int l = 0, r = nums.length - 1;
         
-        while(l < nums.length) {
-            if (nums[l] == sortedNums[l]) {
-                l++;
-            } else {
-                break;
-            }
+        while(l < nums.length && nums[l] == sortedNums[l]) {
+            l++;
         }
         
-        while(r > l) {
-            if (nums[r] == sortedNums[r]) {
-                r--;
-            } else {
-                break;
-            }
+        while(r > l && nums[r] == sortedNums[r]) {
+            r--;
         }
         
         return r - l + 1;

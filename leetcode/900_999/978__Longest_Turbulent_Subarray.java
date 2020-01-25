@@ -32,23 +32,21 @@ class Solution {
             return 0;
         }
         
-        int longestUpHere = 1;
         int ret = 1;
-        
+        int dp = 1;
         for (int i = 1; i < A.length; i++) {
             if (isTurbulent(A, i)) {
-                longestUpHere += 1;
+                dp += 1;
             } else {
-                longestUpHere = A[i] == A[i - 1] ? 1 : 2;
+                dp = A[i] == A[i - 1] ? 1 : 2;
             }
             
-            ret = Math.max(ret, longestUpHere);
+            ret = Math.max(ret, dp);
         }
         
         return ret;
     }
     
-    // i >= 1
     private boolean isTurbulent(int[] A, int i) {
         if (i == 1) {
             return A[i] != A[i - 1];
