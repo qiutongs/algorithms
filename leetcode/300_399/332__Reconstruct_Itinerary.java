@@ -3,82 +3,54 @@ class Solution {
         if (tickets == null || tickets.isEmpty()) {
             return Collections.emptyList();
         }
-        
         Map<String, List<Edge>> graph = buildGraph(tickets);
         
         List<String> ret = new ArrayList<>(graph.keySet().size());
-        List<String> curIt = new ArrayList<>();
-        
-        curIt.add("JFK");
-        
-        dfs(ret, curIt, graph, tickets.size());
-        
+        ret.add("JFK");
+        dfs(graph, new HashSet<>(), tickets.size(), ret);
         return ret;
     }
     
-    private boolean dfs(List<String> ret, List<String> curIt, Map<String, List<Edge>> graph, int tickets) {
-        if (curIt.size() == tickets + 1) {
-            ret.addAll(curIt);
+    private boolean dfs(Map<String, List<Edge>> graph, Set<Edge> visited, int edgesCnt, List<String> ret) {
+        if (ret.size() == edgesCnt + 1) {
             return true;
         }
-        
-        String curNode = curIt.get(curIt.size() - 1);
-        
-        if (graph.get(curNode) == null) {
-            return false;
-        }
-        
+        String curNode = ret.get(ret.size() - 1);
         for (Edge edge : graph.get(curNode)) {
-            if (edge.visited == false) {
-                edge.visited = true;
-                curIt.add(edge.to);
-                
-                if (dfs(ret, curIt, graph, tickets)) {
+            if (visited.contains(edge) == false) {
+                visited.add(edge);
+                ret.add(edge.des);
+                if (dfs(graph, visited, edgesCnt, ret)) {
                     return true;
                 }
-                
-                edge.visited = false;
-                curIt.remove(curIt.size() - 1);
+                ret.remove(ret.size() - 1);
+                visited.remove(edge);
             }
         }
-        
         return false;
     }
     
     private Map<String, List<Edge>> buildGraph(List<List<String>> tickets) {
         Map<String, List<Edge>> ret = new HashMap<>();
-        
         for (List<String> ticket : tickets) {
-            ret.compute(ticket.get(0), (k, v) -> {
-                if (v == null) {
-                    List<Edge> list = new LinkedList<>();
-                    list.add(new Edge(ticket.get(1)));
-                    return list;
-                } else {
-                    v.add(new Edge(ticket.get(1)));
-                    return v;
-                }
-            });
+            ret.putIfAbsent(ticket.get(0), new LinkedList<>());
+            ret.putIfAbsent(ticket.get(1), new LinkedList<>());
+            ret.get(ticket.get(0)).add(new Edge(ticket.get(1)));
         }
-        
-        ret.forEach((k, v) -> {
-            Collections.sort(v);
+        ret.forEach((node, edgeList) -> {
+            Collections.sort(edgeList);
         });
-        
         return ret;
     }
     
     private class Edge implements Comparable<Edge> {
-        String to;
-        boolean visited;
+        String des;
         
-        Edge(String to) {
-            this.to = to;
-            this.visited = false;
+        Edge(String des) {
+            this.des = des;
         }
-        
         public int compareTo(Edge other) {
-            return this.to.compareTo(other.to);
+            return this.des.compareTo(other.des);
         }
     } 
 }

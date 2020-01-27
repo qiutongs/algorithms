@@ -85,3 +85,64 @@ class Solution {
         return point[0] >= 0 && point[0] < grid.length && point[1] >= 0 && point[1]< grid[0].length;
     }
 }
+
+class Solution {
+    private int[] parent;
+    private int count = 0;
+    
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) {
+            return 0;
+        }
+        int m = grid.length, n = grid[0].length;
+        int[] deltaX = {0, 0, 1, -1};
+        int[] deltaY = {1, -1, 0, 0};
+        parent = new int[m * n];
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = i;
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    count++;
+                }
+            }
+        }
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    for (int k = 0; k < 4; k++) {
+                        int x = i + deltaX[k];
+                        int y = j + deltaY[k];
+                        if (inbound(grid, x, y) && grid[x][y] == '1') {
+                            union(i * n + j, x * n + y);
+                        }
+                    }
+                }
+            }
+        }
+        return count;
+    }
+    
+    private void union(int p, int q) {
+        int rootP = find(p);
+        int rootQ = find(q);
+        if (rootP != rootQ) {
+            parent[rootP] = rootQ;
+            count--;
+        }
+    }
+
+    private int find(int x) {
+        while(x != parent[x]) {
+            parent[x] = parent[parent[x]];
+            x = parent[x];
+        }
+        return x;
+    }
+    
+    private boolean inbound(char[][] grid, int x, int y) {
+        return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length;
+    }
+}
