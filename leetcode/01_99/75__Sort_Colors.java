@@ -1,7 +1,7 @@
 /*
 Special counting sort: the integer key is the item itself
 */
-class Solution1 {
+class Solution {
     public void sortColors(int[] nums) {
         countingSort(nums);
     }
@@ -34,7 +34,7 @@ class Solution1 {
 - firstTwo - n: all two
 https://en.wikipedia.org/wiki/Dutch_national_flag_problem
 */
-class Solution2 {
+class Solution {
     public void sortColors(int[] nums) {
         int l = 0, r = nums.length - 1;
 
