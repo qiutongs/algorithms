@@ -27,7 +27,7 @@ class Solution {
         for (int i = 0; i < 4; i++) {
             int x1 = x + deltaX[i];
             int y1 = y + deltaY[i];
-            if (inBound(grid, x1, y1) && visited[x1][y1] == false && grid[x1][y1] == '1') {
+            if (inBound(grid, x1, y1) && grid[x1][y1] == '1' && visited[x1][y1] == false) {
                 dfs(grid, x1, y1, visited);
             }
         }

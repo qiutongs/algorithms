@@ -4,7 +4,6 @@ class Trie {
     /** Initialize your data structure here. */
     public Trie() {
         this.root = new Node();
-        this.root.isKey = true;
     }
     
     /** Inserts a word into the trie. */
@@ -12,11 +11,8 @@ class Trie {
         Node cur = root;
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
-            Node child = cur.getChild(c);
-            if (child == null) {
-                cur.addChild(c);
-            }
-            cur = cur.getChild(c);
+            cur.addIfAbsent(c);
+            cur = cur.get(c);
         }
         cur.isKey = true;
     }
@@ -37,7 +33,7 @@ class Trie {
         Node cur = root;
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
-            Node child = cur.getChild(c);
+            Node child = cur.get(c);
             if (child == null) {
                 return null;
             } else {
@@ -51,12 +47,14 @@ class Trie {
         Node[] children = new Node[26];
         boolean isKey = false;
         
-        Node getChild(char c) {
+        Node get(char c) {
             return children[(int)(c - 'a')];
         }
         
-        void addChild(char c) {
-            children[(int)(c - 'a')] = new Node();
+        void addIfAbsent(char c) {
+            if (children[(int)(c - 'a')] == null) {
+                children[(int)(c - 'a')] = new Node();
+            }
         }
     }
 }
