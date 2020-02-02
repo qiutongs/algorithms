@@ -11,36 +11,27 @@ class Solution {
         if (head == null) {
             return true;
         }
-        
+        ListNode mid = getMid(head);
+        ListNode tail = reverse(mid);
+
+        while(head != mid && head.val == tail.val) {
+            head = head.next;
+            tail = tail.next;
+        }
+        return head == mid && head.val == tail.val;
+    }
+    
+    private ListNode getMid(ListNode head) {
         ListNode slow = head, fast = head;
         while(fast.next != null && fast.next.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
-        
-        ListNode tail = null;
-        
-        // odd: 1 -> 2 <- 1
-        if (fast.next == null) {
-            tail = reverse(slow, slow.next);
-        } else { // even: 1 -> 2 -> null  null <- 2 <- 1
-            tail = reverse(null, slow.next);
-        }
-        
-        slow.next = null;
-        
-        while(head != tail) {
-            if (head.val != tail.val) {
-                return false;
-            }
-            head = head.next;
-            tail = tail.next;
-        }
-        return true;
+        return slow;
     }
     
-    private ListNode reverse(ListNode preHead, ListNode head) {
-        ListNode prev = preHead, cur = head;
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null, cur = head;
         while(cur != null) {
             ListNode next = cur.next;
             cur.next = prev;

@@ -11,14 +11,14 @@ class Solution {
     private void dfs(int[] candidates, int offset, int target, List<Integer> curList, List<List<Integer>> ret) {
         if (target == 0) {
             ret.add(new ArrayList<>(curList));
-        }
-        if (target < 0) {
             return;
         }
         for (int i = offset; i < candidates.length; i++) {
-            curList.add(candidates[i]);
-            dfs(candidates, i, target - candidates[i], curList, ret);
-            curList.remove(curList.size() - 1);
+            if (target - candidates[i] >= 0) {
+                curList.add(candidates[i]);
+                dfs(candidates, i, target - candidates[i], curList, ret);
+                curList.remove(curList.size() - 1);
+            }
         }
     }
 }

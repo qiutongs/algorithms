@@ -10,13 +10,12 @@ class Solution {
             ret.add(new ArrayList<>(curList));
             return;
         }
-        if (n < 0) {
-            return;
-        }
         for (int i = offset; i <= 9; i++) {
-            curList.add(i);
-            dfs(k - 1, i + 1, n - i, curList, ret);
-            curList.remove(curList.size() - 1);
+            if (n - i >= 0) {
+                curList.add(i);
+                dfs(k - 1, i + 1, n - i, curList, ret);
+                curList.remove(curList.size() - 1);
+            }
         }
     }
 }

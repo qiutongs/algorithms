@@ -1,18 +1,18 @@
 class Solution {
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> ret = new ArrayList<>();
-        dfs(n, k, new ArrayList<>(), ret);
+        dfs(n, 1, k, new ArrayList<>(), ret);
         return ret; 
     }
     
-    private void dfs(int n, int k, List<Integer> curList, List<List<Integer>> ret) {
+    private void dfs(int n, int offset, int k, List<Integer> curList, List<List<Integer>> ret) {
         if (k == 0) {
             ret.add(new ArrayList<>(curList));
             return;
         }
-        for (int i = n; i >= 1; i--) {
+        for (int i = offset; i <= n; i++) {
             curList.add(i);
-            dfs(i - 1, k - 1, curList, ret);
+            dfs(n, i + 1, k - 1, curList, ret);
             curList.remove(curList.size() - 1);
         }
     }

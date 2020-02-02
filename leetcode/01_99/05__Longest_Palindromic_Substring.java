@@ -1,56 +1,28 @@
 class Solution {
     public String longestPalindrome(String s) {
         if (s == null || s.isEmpty()) {
-            return s;
-        }
-        int[] ret = {0, 0};
-        for (int i = 0; i < s.length() - 1; i++) {
-            int[] tmp = getLongestPalin(s, i, i);
-            ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
-            
-            if (s.charAt(i) == s.charAt(i + 1)) {
-                tmp = getLongestPalin(s, i, i + 1);
-                ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
-            }
-        }
-        return s.substring(ret[0], ret[1] + 1);
-    }
-    
-    private int[] getLongestPalin(String s, int l, int r) {
-        while(l - 1 >= 0 && r + 1 < s.length() && s.charAt(l - 1) == s.charAt(r + 1)) {
-            l--;
-            r++;
-        }
-        int[] ret = {l, r};
-        return ret;
-    }
-}
-
-class Solution {
-    public String longestPalindrome(String s) {
-        if (s == null || s.isEmpty()) {
             return "";
         }
         int[] ret = {0, 0};
         for (int i = 0; i < s.length() - 1; i++) {
-            int[] tmp = getLongestPalin(s, i, i);
-            ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
-            
-            tmp = getLongestPalin(s, i, i + 1);
-            ret = tmp[1] - tmp[0] > ret[1] - ret[0] ? tmp : ret;
+            getLongestPalin(s, i, i, ret);
+            getLongestPalin(s, i, i + 1, ret);
         }
         return s.substring(ret[0], ret[1] + 1);
     }
     
-    private int[] getLongestPalin(String s, int l, int r) {
-        int[] ret = {0, 0};
-        while(l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
-            ret[0] = l;
-            ret[1] = r;
+    private void getLongestPalin(String s, int l, int r, int[] ret) {
+        if (r >= s.length() || s.charAt(l) != s.charAt(r)) {
+            return;
+        }
+        while(l - 1 >= 0 && r + 1 < s.length() && s.charAt(l - 1) == s.charAt(r + 1)) {
             l--;
             r++;
         }
-        return ret;
+        if (r - l > ret[1] - ret[0]) {
+            ret[0] = l;
+            ret[1] = r;
+        }
     }
 }
 
