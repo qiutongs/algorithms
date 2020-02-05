@@ -7,6 +7,123 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
+// BFS + All the nulls
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder ret = new StringBuilder();
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        
+        while(q.isEmpty() == false) {
+            TreeNode node = q.poll();
+            if (node != null) {
+                ret.append(node.val); 
+                q.offer(node.left);
+                q.offer(node.right);
+            } else {
+                ret.append('#');
+            }
+            ret.append(',');
+        }
+        return ret.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] vals = data.split(",");
+        TreeNode root = createNode(vals[0]);
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        int index = 1;
+        
+        while(q.isEmpty() == false) {
+            TreeNode node = q.poll();
+            
+            if (node != null) {
+                node.left = createNode(vals[index++]);
+                node.right = createNode(vals[index++]);
+                q.offer(node.left);
+                q.offer(node.right);
+            }
+        }
+        return root;
+    }
+    
+    private TreeNode createNode(String val) {
+        return val.equals("#") ? null : new TreeNode(Integer.valueOf(val));
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+
+// BFS + remove trailing '#'
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder ret = new StringBuilder();
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        
+        while(q.isEmpty() == false) {
+            TreeNode node = q.poll();
+            if (node != null) {
+                ret.append(node.val); 
+                q.offer(node.left);
+                q.offer(node.right);
+            } else {
+                ret.append('#');
+            }
+            ret.append(',');
+        }
+        
+        // Remove all the trailing '#'
+        int index = ret.length() - 2;
+        while(index >= 2 && ret.charAt(index) == '#') {
+            index -= 2;
+        }
+        ret.setLength(index + 1);
+        return ret.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] vals = data.split(",");
+        TreeNode root = createNode(vals[0]);
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        int index = 1;
+        
+        while(q.isEmpty() == false) {
+            TreeNode node = q.poll();
+            
+            if (node != null) {
+                if (index < vals.length) {
+                    node.left = createNode(vals[index++]);
+                }
+                if (index < vals.length) {
+                    node.right = createNode(vals[index++]);
+                }
+                if (index >= vals.length) {
+                    break;
+                }
+                q.offer(node.left);
+                q.offer(node.right);
+            }
+        }
+        return root;
+    }
+    
+    private TreeNode createNode(String val) {
+        return val.equals("#") ? null : new TreeNode(Integer.valueOf(val));
+    }
+}
+
+// BFS + not adding trailing null
 public class Codec {
 
     // Encodes a tree to a single string.
@@ -124,7 +241,8 @@ public class Codec {
     }
 }
 
-// https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/366036/java-preorder
+// DFS Preorder + NULL
+// Ref: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/366036/java-preorder
 public class Codec {
 
     // Encodes a tree to a single string.
@@ -154,33 +272,28 @@ public class Codec {
         if (data == null || data.isEmpty()) {
             return null;
         }
-        Integer[] preVals = toIntArray(data.split(","));
-        int[] index = { 0 };
-        return construct(preVals, index);
+        return dfs(data.split(","), new int[]{0});
     }
     
-    private TreeNode construct(Integer[] preVals, int[] index) {
-        if (preVals[index[0]] == null) {
-            index[0]++;
+    private TreeNode dfs(String[] preorder, int[] offset) {
+        String curValStr = preorder[offset[0]];
+        if (curValStr.equals("#")) {
+            offset[0]++;
             return null;
         }
-        TreeNode ret = new TreeNode(preVals[index[0]]);
-        index[0]++;
-        ret.left = construct(preVals, index);
-        ret.right = construct(preVals, index);
-        return ret;
-    }
-    
-    private Integer[] toIntArray(String[] strArr) {
-        Integer[] ret = new Integer[strArr.length];
-        for (int i = 0; i < strArr.length; i++) {
-            ret[i] = strArr[i].equals("#") ? null : Integer.valueOf(strArr[i]);
-        }
+        TreeNode ret = new TreeNode(Integer.valueOf(curValStr));
+        offset[0]++;
+        ret.left = dfs(preorder, offset);
+        ret.right = dfs(preorder, offset);
         return ret;
     }
 }
 
-// Wrong: cannnot handle duplicate values
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+
+// Wrong: cannnot handle duplicate values [3,2,4,3]
 public class Codec {
 
     // Encodes a tree to a single string.

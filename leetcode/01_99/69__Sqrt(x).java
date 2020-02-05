@@ -1,3 +1,4 @@
+// Binary Search
 class Solution {
     public int mySqrt(int x) {
         int l = 0, r = x;
@@ -13,6 +14,7 @@ class Solution {
     }
 }
 
+// Newton's method
 class Solution {
     public int mySqrt(int x) {
         double xd = (double)x;

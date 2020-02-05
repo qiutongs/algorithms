@@ -1,3 +1,4 @@
+// BFS
 class Solution {
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
         List<Edge>[] graph = buildGraph(n, flights);
@@ -50,24 +51,29 @@ class Solution {
     }
 }
 
+// Uniform Cost Search
 class Solution {
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
         List<Edge>[] graph = buildGraph(n, flights);
         
         Queue<Vertex> q = new PriorityQueue<>((v1, v2) -> v1.dist - v2.dist);
-        Set<Integer> visited = new HashSet<>();
         q.offer(new Vertex(src, 0, 0));
+        Set<Integer> explored = new HashSet<>();
+        
         while(q.isEmpty() == false) {
             Vertex v = q.poll();
-            visited.add(v.id);
+            
             if (v.id == dst) {
                 return v.dist;
             }
-            for (Edge edge : graph[v.id]) {
-                if (visited.contains(edge.des)) {
-                    continue;
-                }
-                if (v.level < K || edge.des == dst) {
+            
+            explored.add(v.id);
+            
+            if (v.level <= K) {
+                for (Edge edge : graph[v.id]) {
+                    if (explored.contains(edge.des)) {
+                        continue;
+                    }
                     q.offer(new Vertex(edge.des, v.dist + edge.w, v.level + 1));
                 }
             }

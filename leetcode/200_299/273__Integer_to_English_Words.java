@@ -16,35 +16,52 @@ class Solution {
             return "Zero";
         }
         
-        String ret = "";
-        for (int i = 0; i < BIG_NUMBERS.length && num > 0; i++) {
+        Deque<String> ret = new LinkedList<>();
+        for (int i = 0; i < BIG_NUMBERS.length && num > 0; i++, num /= 1000) {
+            // if 0, don't add any unit
             if ((num % 1000) > 0) {
-                ret = concat(concat(toString3(num % 1000), BIG_NUMBERS[i]), ret);
+                // 1. add unit
+                ret.addFirst(BIG_NUMBERS[i]);
+
+                // 2. add 3 digits
+                Deque<String> threeDigits = toString3(num % 1000);
+                while(threeDigits.isEmpty() == false) {
+                    ret.addFirst(threeDigits.removeLast());
+                }
             }
-            num /= 1000;
         }
-        return ret;
+        return toString(ret);
     }
-    // num >= 0
-    private String toString3(int num) {
-        if (num < 100) {
-            return toString2(num);
-        } else {
-            return concat(LESS_THAN_20[num / 100] + " Hundred", toString2(num % 100));
-        }
-    }
-    // num >= 0
-    private String toString2(int num) {
-        String ret = null;
-        if (num < 20) {
-            ret = LESS_THAN_20[num];
-        } else {
-            ret = concat(TENS[num / 10], LESS_THAN_20[num % 10]);
+
+    private Deque<String> toString3(int num) {
+        Deque<String> ret = toString2(num % 100);
+        if (num >= 100) {
+            ret.addFirst("Hundred");
+            ret.addFirst(LESS_THAN_20[num / 100]);
         }
         return ret;
     }
 
-    private String concat(String s1, String s2) {
-        return s2.isEmpty() ? s1 : s1 + " " + s2;
+    private Deque<String> toString2(int num) {
+        Deque<String> ret = new LinkedList<>();
+        if (num < 20) {
+            ret.addLast(LESS_THAN_20[num]);
+        } else {
+            ret.addLast(TENS[num / 10]);
+            ret.addLast(LESS_THAN_20[num % 10]);
+        }
+        return ret;
+    }
+    
+    private String toString(Deque<String> queue) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : queue) {
+            if (str.isEmpty() == false) {
+                sb.append(str);
+                sb.append(' ');
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
     }
 }
