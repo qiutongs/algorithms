@@ -5,9 +5,9 @@ public class Clock {
 	private static double HOUR_HAND_DEGREE_PER_MINUTE = 0.5;
 	private static double MINUTE_HAND_DEGREE_PER_MINUTE = 6.0;
 
-	public static double intersectionAngle(double tickMinute) {
-		int ticketMinuteInt = (int) tickMinute;
-		double ticketMinuteFrac = tickMinute - ticketMinuteInt;
+	public static double intersectionAngle(double pastMinutes) {
+		int ticketMinuteInt = (int) pastMinutes;
+		double ticketMinuteFrac = pastMinutes - ticketMinuteInt;
 
 		double hourHandDegree = (ticketMinuteInt % 720 + ticketMinuteFrac) * HOUR_HAND_DEGREE_PER_MINUTE;
 		double minuteHandDegree = (ticketMinuteInt % 60 + ticketMinuteFrac) * MINUTE_HAND_DEGREE_PER_MINUTE;
