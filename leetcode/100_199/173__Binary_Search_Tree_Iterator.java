@@ -9,7 +9,7 @@
  */
 // O(1) time(worst): next and hasNext
 // O(n) space
-class BSTIterator1 {
+class BSTIterator {
 
     private List<Integer> nodes = new ArrayList<>();
     private int index = 0;
@@ -40,10 +40,46 @@ class BSTIterator1 {
         inorder(node.right);
     }
 }
+
+// O(h) time(worst): next and hasNext
+// O(n) space
+class BSTIterator {
+
+    private Stack<TreeNode> stack = new Stack<>();
+    private Set<TreeNode> expanded = new HashSet<>();
+    
+    public BSTIterator(TreeNode root) {
+        if (root != null) {
+            stack.push(root);
+        }
+    }
+    
+    /** @return the next smallest number */
+    public int next() {
+        while(expanded.contains(stack.peek()) == false) {
+            expanded.add(stack.peek());
+            TreeNode top = stack.pop();
+            if (top.right != null) {
+                stack.push(top.right);
+            }
+            stack.push(top);
+            if (top.left != null) {
+                stack.push(top.left);
+            }
+        }
+        return stack.pop().val;
+    }
+    
+    /** @return whether we have a next smallest number */
+    public boolean hasNext() {
+        return stack.isEmpty() == false;
+    }
+}
+
 // O(1) time(avg): next and hasNext
-// O(n) time(worst): next and hasNext
+// O(h) time(worst): next and hasNext
 // O(h) space
-class BSTIterator2 {
+class BSTIterator {
 
     private Stack<TreeNode> stack = new Stack<>();
     private TreeNode curNode = null;

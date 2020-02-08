@@ -1,33 +1,28 @@
 class WordDictionary {
 
-    private final Node root; 
+    private final TrieNode root = new TrieNode(); 
     
     /** Initialize your data structure here. */
     public WordDictionary() {
-        this.root = new Node();
-        this.root.isKey = true;
     }
     
     /** Adds a word into the data structure. */
     public void addWord(String word) {
-        Node cur = root;
+        TrieNode cur = root;
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
-            Node child = cur.getChild(c);
-            if (child == null) {
-                cur.addChild(c);
-            }
-            cur = cur.getChild(c);
+            cur.addIfAbsent(c);
+            cur = cur.get(c);
         }
         cur.isKey = true;
     }
     
     /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
     public boolean search(String word) {
-        return dfs(word, 0, root);
+        return dfs(root, word, 0);
     }
     
-    private boolean dfs(String word, int offset, Node node) {
+    private boolean dfs(TrieNode node, String word, int offset) {
         if (node == null) {
             return false;
         }
@@ -37,26 +32,26 @@ class WordDictionary {
         char c = word.charAt(offset);
         if (c == '.') {
             for (char i = 'a'; i <= 'z'; i++) {
-                if (dfs(word, offset + 1, node.getChild(i))) {
+                if (dfs(node.get(i), word, offset + 1)) {
                     return true;
                 }
             }
             return false;
         } else {
-            return dfs(word, offset + 1, node.getChild(c));
+            return dfs(node.get(c), word, offset + 1);
         }
     }
     
-    private class Node {
-        Node[] children = new Node[26];
+    private class TrieNode {
+        TrieNode[] childs = new TrieNode[26];
         boolean isKey = false;
-        
-        Node getChild(char c) {
-            return children[(int)(c - 'a')];
+        TrieNode get(char c) {
+            return childs[(int)(c - 'a')];
         }
-        
-        void addChild(char c) {
-            children[(int)(c - 'a')] = new Node();
+        void addIfAbsent(char c) {
+            if (childs[(int)(c - 'a')] == null) {
+                childs[(int)(c - 'a')] = new TrieNode();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 class Solution {
-    private static HashMap<Character, Integer> SYMBOLS= new HashMap<>();
+    private static HashMap<Character, Integer> SYMBOLS = new HashMap<>();
+    private static HashMap<Character, Character> SUB = new HashMap<>();
     
     static {
         SYMBOLS.put('I', 1);
@@ -9,6 +10,13 @@ class Solution {
         SYMBOLS.put('C', 100);
         SYMBOLS.put('D', 500);
         SYMBOLS.put('M', 1000);
+        
+        SUB.put('X', 'I');
+        SUB.put('V', 'I');
+        SUB.put('L', 'X');
+        SUB.put('C', 'X');
+        SUB.put('D', 'C');
+        SUB.put('M', 'C');
     }
     
     public int romanToInt(String s) {
@@ -19,19 +27,14 @@ class Solution {
         char prev = '\0';
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            ret += eval(prev, c);
+            Character sub = SUB.get(c);
+            if (sub != null && sub.charValue() == prev) {
+                ret += SYMBOLS.get(c) - 2 * SYMBOLS.get(prev);
+            } else {
+                ret += SYMBOLS.get(c);
+            }
             prev = c;
         }
         return ret;
-    }
-    
-    private int eval(char prev, char c) {
-        if ((prev == 'I' && (c == 'V' || c == 'X'))
-         || (prev == 'X' && (c == 'L' || c == 'C'))
-         || (prev == 'C' && (c == 'D' || c == 'M'))) {
-            return SYMBOLS.get(c) - 2 * SYMBOLS.get(prev);
-        } else {
-            return SYMBOLS.get(c);
-        }
     }
 }

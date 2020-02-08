@@ -6,29 +6,21 @@ class Solution {
         if (s == null || s.length() == 0) {
             return 0;
         }
-        
-        int[] dp = new int[s.length() + 1];
+        int len = s.length();
+        int[] dp = new int[len + 1];
         dp[0] = 1;
-        
-        for (int i = 0; i < s.length(); i++) {
+        dp[1] = s.charAt(0) == '0' ? 0 : 1;
+        for (int i = 1; i < len; i++) {
             char c = s.charAt(i);
-            
-            // Decode as single digit.
-            if (c != '0') {
-                dp[i + 1] = dp[i];
+            int singleDig = toInt(s.charAt(i));
+            int doubleDig = singleDig + 10 * toInt(s.charAt(i - 1));
+            if (singleDig > 0) {
+                dp[i + 1] += dp[i];
             }
-            
-            // Decode as double digits.
-            if (i > 0) {
-                char preC = s.charAt(i - 1);
-                int twoDigits = toInt(c) + 10 * toInt(preC);
-                
-                if (twoDigits >= 10 && twoDigits <= 26) {
-                    dp[i + 1] += dp[i - 1];
-                }
+            if (doubleDig >= 10 && doubleDig <= 26) {
+                dp[i + 1] += dp[i - 1];
             }
         }
-        
         return dp[s.length()];
     }
     

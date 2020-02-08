@@ -7,7 +7,40 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+// https://www.geeksforgeeks.org/iterative-postorder-traversal-using-stack/
+// https://www.jiuzhang.com/solution/binary-tree-postorder-traversal/
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        
+        List<Integer> ret = new LinkedList<>();
+        
+        Stack<TreeNode> stack = new Stack<>();
+        HashSet<TreeNode> expanded = new HashSet<>();
+        stack.push(root);
+        
+        while(stack.isEmpty() == false) {
+            TreeNode top = stack.peek();
+            if (expanded.contains(top) == false) {
+                expanded.add(top);
+                if (top.right != null) {
+                    stack.push(top.right);
+                }
+                if (top.left != null) {
+                    stack.push(top.left);
+                }
+            } else {
+                ret.add(stack.pop().val);
+            }
+        }
+        
+        return ret;
+    }
+}
+
+class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
         if (root == null) {
             return Collections.emptyList();
@@ -37,7 +70,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
         if (root == null) {
             return Collections.emptyList();
@@ -46,69 +79,38 @@ class Solution2 {
         List<Integer> ret = new LinkedList<>();
         
         Stack<TreeNode> stack = new Stack<>();
-        HashSet<TreeNode> visited = new HashSet<>();
         stack.push(root);
-        visited.add(root);
+        TreeNode prev = null;
         
         while(stack.isEmpty() == false) {
-            while(true) {
-                TreeNode top = stack.peek();
-                boolean hasAdjacent = false;
-                
-                if (top.right != null && visited.contains(top.right) == false) {
-                    visited.add(top.right);
-                    stack.push(top.right);
-                    hasAdjacent = true;
+            TreeNode cur = stack.peek();
+            if (isGoingDown(cur, prev)) {
+                if (cur.left != null) {
+                    stack.push(cur.left);
+                } else if (cur.right != null) {
+                    stack.push(cur.right);
+                } else {
+                    ret.add(stack.pop().val);
                 }
-            
-                if (top.left != null && visited.contains(top.left) == false) {
-                    visited.add(top.left);
-                    stack.push(top.left);
-                    hasAdjacent = true;
+            } else if (cur.left == prev) {
+                if (cur.right != null) {
+                    stack.push(cur.right);
+                } else {
+                    ret.add(stack.pop().val);
                 }
-                
-                if (hasAdjacent == false) {
-                    break;
-                }
+            } else if (cur.right == prev) {
+                ret.add(stack.pop().val);
+            } else {
+                throw new RuntimeException();
             }
-            
-            ret.add(stack.pop().val);
+            prev = cur;
         }
         
         return ret;
+    }
+    
+    private boolean isGoingDown(TreeNode cur, TreeNode prev) {
+        return prev == null || prev.left == cur || prev.right == cur;
     }
 }
 
-class Solution3 {
-    public List<Integer> postorderTraversal(TreeNode root) {
-        if (root == null) {
-            return Collections.emptyList();
-        }
-        
-        List<Integer> ret = new LinkedList<>();
-        
-        Stack<TreeNode> stack = new Stack<>();
-        HashSet<TreeNode> visited = new HashSet<>();
-        stack.push(root);
-        
-        while(stack.isEmpty() == false) {
-            TreeNode top = stack.peek();
-            
-            if (visited.contains(top)) {
-                ret.add(stack.pop().val);
-            } else {
-                visited.add(top);
-                
-                if (top.right != null) {
-                    stack.push(top.right);
-                }
-                
-                if (top.left != null) {
-                    stack.push(top.left);
-                }
-            }
-        }
-        
-        return ret;
-    }
-}

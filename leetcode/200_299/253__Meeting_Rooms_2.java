@@ -74,6 +74,8 @@ class Solution {
     }
 }
 
+
+// Heap is to store the end time to know the earliest room available
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {
