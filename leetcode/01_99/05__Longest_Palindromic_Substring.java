@@ -1,3 +1,6 @@
+// Native (start from center)
+// Time O(n^2)
+// Space O(1)
 class Solution {
     public String longestPalindrome(String s) {
         if (s == null || s.isEmpty()) {
@@ -26,9 +29,10 @@ class Solution {
     }
 }
 
-/*
- * Interval DP
- */
+
+// Interval DP
+// Time O(n^2)
+// Space O(n^2)
 class Solution {
     public String longestPalindrome(String s) {
         if (s == null || s.length() <= 1) {
@@ -61,60 +65,6 @@ class Solution {
         }
         
         return s.substring(maxLeft, maxRight + 1);
-    }
-}
-
-/* 
- * Improvement on naive solution.
- * O(n ^ 2)
- */
-class Solution {
-    public String longestPalindrome(String s) {
-        if (s == null || s.length() <= 1) {
-            return s;
-        }
-        
-        int maxLeft = 0, maxLength = 1;
-        
-        // Iterate on each character to second last one
-        for (int i = 0; i < s.length() - 1; i++) {   
-            // Expand current character as center
-            int halfLengthCenter = expandToPalindrome(s, i, i);
-            int lengthCenter = halfLengthCenter * 2 - 1;
-            
-            if (lengthCenter > maxLength) {
-                maxLength = lengthCenter;
-                maxLeft = i - halfLengthCenter + 1;
-            }
-            
-            // Expand current character as left middle
-            int halfLengthLeftMid = expandToPalindrome(s, i, i + 1);
-            int lengthLeftMid = halfLengthLeftMid * 2;
-            
-            if (lengthLeftMid > maxLength) {
-                maxLength = lengthLeftMid;
-                maxLeft = i - halfLengthLeftMid + 1;
-            }
-        }
-        
-        return s.substring(maxLeft, maxLeft + maxLength);
-    }
-    
-    // return half length
-    private int expandToPalindrome(String s, int centerLeft, int centerRight) {
-        int halfLength = 0;
-        
-        while(centerLeft >=0 && centerRight < s.length()) {
-            if (s.charAt(centerLeft) != s.charAt(centerRight)) {
-                break;
-            }
-            
-            halfLength++;
-            centerLeft--;
-            centerRight++;
-        }
-        
-        return halfLength;
     }
 }
 

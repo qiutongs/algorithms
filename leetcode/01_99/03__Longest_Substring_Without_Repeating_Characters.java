@@ -10,7 +10,7 @@ class Solution {
             char cR = s.charAt(r);
             cfMap.compute(cR, (k, v) -> v == null ? 1 : v + 1);
             
-            while(cfMap.get(cR) > 1) {
+            while(l <= r && cfMap.get(cR) > 1) {
                 char cL = s.charAt(l);
                 cfMap.compute(cL, (k, v) -> v - 1);
                 l++;

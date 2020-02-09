@@ -1,4 +1,4 @@
-class Solution1 {
+class Solution {
     public boolean isPalindrome(int x) {
         if (x < 0) {
             return false;
@@ -16,7 +16,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public boolean isPalindrome(int x) {
         if (x < 0) {
             return false;

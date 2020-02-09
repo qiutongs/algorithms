@@ -1,3 +1,6 @@
+// Hashtable: value to index and one pass
+// Time O(n) 
+// Space O(n)
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
@@ -19,6 +22,9 @@ class Solution {
     }
 }
 
+// Hashtable: value to index list
+// Time O(n) 
+// Space O(n)
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
@@ -48,6 +54,9 @@ class Solution {
     }
 }
 
+// Two pointers
+// Time O(nlogn)
+// Space O(n)
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
