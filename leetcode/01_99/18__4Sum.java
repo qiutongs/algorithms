@@ -1,3 +1,5 @@
+// 3Sum and one pass
+// Time: O(n^2)
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
         if (nums == null || nums.length < 4) {
@@ -68,6 +70,7 @@ class Solution {
     }
 }
 
+// Hashtable on value -> pairs
 // http://www.lifeincode.net/programming/leetcode-two-sum-3-sum-3-sum-closest-and-4-sum-java/
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) { 

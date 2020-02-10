@@ -7,8 +7,8 @@ class Solution {
         List<Integer> ret = new LinkedList<>();
         int m = matrix.length, n = matrix[0].length;
         int maxDepth = (Math.min(m, n) + 1) / 2;
-        for (int d = 1; d <= maxDepth; d++) {
-            iterate(matrix, d - 1, d - 1, m - 2 * (d - 1), n - 2 * (d - 1), ret);
+        for (int d = 0; d < maxDepth; d++) {
+            iterate(matrix, d, d, m - 2 * d, n - 2 * d, ret);
         }
         return ret;
     }

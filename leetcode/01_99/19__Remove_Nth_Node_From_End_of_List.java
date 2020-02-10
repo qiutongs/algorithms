@@ -6,7 +6,8 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+// Slow-Fast pointers
+class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
@@ -28,7 +29,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dummy = new ListNode(0);
         dummy.next = head;

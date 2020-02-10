@@ -10,6 +10,8 @@
  *     ListNode(int x) { val = x; }
  * }
  */
+// Heap
+// Time: O(nlogk)
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
         ListNode dummy = new ListNode(0);
@@ -38,7 +40,7 @@ class Solution {
 /*
  * Iterative 2-way merge
  */
-class Solution2 {
+class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) {
             return null;

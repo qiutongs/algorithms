@@ -23,6 +23,7 @@ class Solution {
     }
 }
 
+// Decreasing monotonic stack
 class Solution {
     public int trap(int[] height) {
         if (height == null || height.length == 0) {

@@ -25,7 +25,7 @@ class Solution {
     }
 }
 
-// passed most of tests but wrong: "([)]"
+// Counter: wrong; passed most of tests but wrong: "([)]"
 class Solution {
     public boolean isValid(String s) {
         int lp1 = 0, rp1 = 0, lp2 = 0, rp2 = 0, lp3 = 0, rp3 = 0;

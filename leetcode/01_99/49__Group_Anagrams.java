@@ -1,3 +1,4 @@
+// Hashtable + counting sort
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) {

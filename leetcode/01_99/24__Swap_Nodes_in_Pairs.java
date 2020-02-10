@@ -6,7 +6,8 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+// Recursive
+class Solution {
     public ListNode swapPairs(ListNode head) {
         if (head == null || head.next == null) {
             return head;
@@ -20,7 +21,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public ListNode swapPairs(ListNode head) {
         if (head == null || head.next == null) {
             return head;

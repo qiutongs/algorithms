@@ -1,3 +1,5 @@
+// Two Sum + one pass
+// Time: O(n^2)
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         if (nums == null || nums.length < 3) {
@@ -50,7 +52,7 @@ class Solution {
         return ret;
     }
 
-    // alternative
+    // alternative with HashMap
     private List<List<Integer>> twoSum(int[] nums, int r, int target) {
         List<List<Integer>> ret = new LinkedList<>();
         

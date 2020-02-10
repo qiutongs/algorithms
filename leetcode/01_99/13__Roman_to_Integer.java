@@ -1,3 +1,6 @@
+// To validate, regular expression is best
+// ^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$
+// https://stackoverflow.com/questions/267399/how-do-you-match-only-valid-roman-numerals-with-a-regular-expression
 class Solution {
     private static HashMap<Character, Integer> SYMBOLS = new HashMap<>();
     private static HashMap<Character, Character> SUB = new HashMap<>();

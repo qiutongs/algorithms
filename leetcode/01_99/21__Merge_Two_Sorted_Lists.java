@@ -6,7 +6,7 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+class Solution {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode dummyHead = new ListNode(0);
         ListNode tail = dummyHead;
@@ -32,7 +32,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null) {
             return l2;
