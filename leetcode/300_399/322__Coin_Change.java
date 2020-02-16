@@ -16,27 +16,51 @@ class Solution {
     }
 }
 
+// DFS + memo
 class Solution {
     public int coinChange(int[] coins, int amount) {
-        // dp[i] is the min amount of coins that add up to i
-        int[][] dp = new int[coins.length + 1][amount + 1];
-        for (int i = 0; i <= amount; i++) {
-            dp[0][i] = Integer.MAX_VALUE;
+        Integer[] memo = new Integer[amount + 1];
+        int ret = dfs(coins, amount, memo);
+        return ret == Integer.MAX_VALUE ? -1 : ret;
+    }
+    
+    private int dfs(int[] coins, int amount, Integer[] memo) {
+        if (amount == 0) {
+            return 0;
         }
-        for (int i = 0; i <= coins.length; i++) {
-            dp[i][0] = 0;
+        if (memo[amount] != null) {
+            return memo[amount];
         }
-        
-        for (int i = 1; i <= coins.length; i++) {
-            for (int j = 1; j <= amount; j++) {
-                dp[i][j] = dp[i - 1][j];
-                for (int k = 1; k * coins[i - 1] <= j; k++) {
-                    if (dp[i][j - k * coins[i - 1]] != Integer.MAX_VALUE) {
-                        dp[i][j] = Math.min(dp[i][j], dp[i][j - k * coins[i - 1]] + k);
-                    }
-                }
+        int ret = Integer.MAX_VALUE;
+        for (int coin : coins) {
+            if (amount >= coin) {
+                ret = Math.min(ret, dfs(coins, amount - coin, memo));
             }
         }
-        return dp[coins.length][amount] == Integer.MAX_VALUE ? -1 : dp[coins.length][amount];
+        ret = ret == Integer.MAX_VALUE ? Integer.MAX_VALUE : ret + 1;
+        memo[amount] = ret;
+        return ret;
+    }
+}
+
+// Raw DFS
+// Time Limit Exceeded: [1,2,5] 100
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int ret = dfs(coins, amount);
+        return ret == Integer.MAX_VALUE ? -1 : ret;
+    }
+    
+    private int dfs(int[] coins, int amount) {
+        if (amount == 0) {
+            return 0;
+        }
+        int ret = Integer.MAX_VALUE;
+        for (int coin : coins) {
+            if (amount >= coin) {
+                ret = Math.min(ret, dfs(coins, amount - coin));
+            }
+        }
+        return ret == Integer.MAX_VALUE ? Integer.MAX_VALUE : ret + 1;
     }
 }

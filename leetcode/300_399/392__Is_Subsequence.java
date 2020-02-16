@@ -1,3 +1,6 @@
+// Naive two pointers (same direction)
+// Time: O(N)
+// Space: O(1)
 class Solution {
     public boolean isSubsequence(String s, String t) {
         if (s.length() > t.length()) {
@@ -19,30 +22,30 @@ class Solution {
     }
 }
 
-/*
-Naive two pointers
-*/
+// DP Optimal Up To (i, j)
+// Time: O(NM)
+// Space: O(NM)
 class Solution {
     public boolean isSubsequence(String s, String t) {
-        char[] sArray = s.toCharArray();
-        char[] tArray = t.toCharArray();
-
-        int sPos = 0, tPos = 0;
-
-        while(sPos < sArray.length) {
-            while(tPos < tArray.length && tArray[tPos] != sArray[sPos]) {
-                tPos++;
-            }
-
-            if (tPos == tArray.length) {
-                return false;
+        if (s.length() > t.length()) {
+            return false;
+        }
+        if (s.isEmpty()) {
+            return true;
+        }
+        boolean[][] dp = new boolean[s.length() + 1][t.length() + 1];
+        for (int i = 0; i < t.length() + 1; i++) {
+            dp[0][i] = true;
+        }
+        for (int i = 1; i < s.length() + 1; i++) {
+            for (int j = 1; j < t.length() + 1; j++)
+            if (t.charAt(j - 1) == s.charAt(i - 1) ) {
+                dp[i][j] = dp[i - 1][j - 1];
             } else {
-                sPos++;
-                tPos++;
+                dp[i][j] = dp[i][j - 1];
             }
         }
-
-        return true;
+        return dp[s.length()][t.length()];
     }
 }
 
