@@ -1,64 +1,45 @@
 class Solution {
     public int change(int amount, int[] coins) {
-        // Index is the amount; value is the number of combinations.
-        // Initialize to 0 to indicate no combinations.
-        int[] combinations = new int[5001];
-        
-        // Pre-compute coins: sort and remove duplicates.
-        List<Integer> coinsList = new ArrayList<>(coins.length);
-        for(int coin : coins) {
-            coinsList.add(coin);
+        // dp[i] is the total combinations of coins that add up to i
+        int[][] dp = new int[amount + 1][coins.length + 1];
+        for (int i = 0; i < dp[0].length; i++) {
+            dp[0][i] = 1;
         }
-        coinsList = coinsList.stream().sorted().distinct().collect(Collectors.toList());
-        
-        // Base case: 1 combination of amount 0.
-        combinations[0] = 1;
-        
-        for (int i = 0; i <= amount; i++) {
-            // If there is a combination 
-            if (combinations[i] > 0) {
-                for (int coin : coins) {
-                    if (i <= amount) {
-                        combinations[i + coin] += combinations[i];  
-                    }
+        for (int i = 1; i < dp.length; i++) {
+            for (int j = 1; j < dp[0].length; j++) {
+                for (int k = 0; coins[j - 1] * k <= i; k++) {
+                    dp[i][j] += dp[i - coins[j - 1] * k][j - 1];
                 }
             }
         }
-        
-        return combinations[amount];
+        return dp[amount][coins.length];
     }
 }
 
-
+// DFS + memo
 class Solution {
     public int change(int amount, int[] coins) {
-        int[] result = { 0 };
-        
-        // Pre-compute coins: sort and remove duplicates.
-        List<Integer> coinsList = new ArrayList<>(coins.length);
-        for(int coin : coins) {
-            coinsList.add(coin);
-        }
-        coinsList = coinsList.stream().sorted().distinct().collect(Collectors.toList());
-        
-        backtrack(result, coinsList, 0, amount);
-        
-        return result[0];
+        Integer[][] memo = new Integer[amount + 1][coins.length];
+        return dfs(amount, coins, 0, memo);
     }
     
-    private void backtrack(int[] result, List<Integer> coinsList, int curCoinIndex, int amountLeft) {
-        if (amountLeft == 0) {
-            result[0]++;
-            return;
+    private int dfs(int amount, int[] coins, int offset, Integer[][] memo) {
+        if (amount == 0) {
+            return 1;
         }
-
-        if (curCoinIndex == coinsList.size()) {
-            return;
+        if (offset == coins.length) {
+            return 0;
         }
-        
-        do {
-            backtrack(result, coinsList, curCoinIndex + 1, amountLeft);
-            amountLeft -= coinsList.get(curCoinIndex);
-        } while(amountLeft >= 0);
+        if (memo[amount][offset] != null) {
+            return memo[amount][offset];
+        }
+        int ret = 0;
+        for (int i = offset; i < coins.length; i++) {
+            if (amount >= coins[i]) {
+                ret += dfs(amount - coins[i], coins, i, memo);
+            }
+        }
+        memo[amount][offset] = ret;
+        return ret;
     }
 }
