@@ -1,4 +1,5 @@
-// DP idea: O(n^2)
+// DP
+// Time: O(N^2)
 class Solution {
     public int lengthOfLIS(int[] nums) {
         if (nums == null || nums.length == 0) {
@@ -62,5 +63,33 @@ class Solution2 {
         }
         
         return low;
+    }
+}
+
+// DFS + memo
+// Time: O(N^2)
+// Note: raw DFS -> Time Limit Exceed
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        Integer[] memo = new Integer[nums.length];
+        return dfs(nums, 0, memo);
+    }
+    
+    private int dfs(int[] nums, int nbIndex, Integer[] memo) {
+        if (nbIndex == nums.length) {
+            return 0;
+        }
+        if (memo[nbIndex] != null) {
+            return memo[nbIndex];
+        }
+        int cur = nbIndex == 0 ? Integer.MIN_VALUE : nums[nbIndex - 1];
+        int ret = 0;
+        for (int i = nbIndex; i < nums.length; i++) {
+            if (nums[i] > cur) {
+                ret = Math.max(ret, 1 + dfs(nums, i + 1, memo));
+            }
+        }
+        memo[nbIndex] = ret;
+        return ret;
     }
 }

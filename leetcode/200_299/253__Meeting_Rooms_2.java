@@ -1,3 +1,39 @@
+// Sort (Chronological Order)
+// Time: O(NlogN)
+// Space: O(N)
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        int n = intervals.length;
+        int[] starts = new int[n];
+        int[] ends = new int[n];
+        for (int i = 0; i < intervals.length; i++) {
+            starts[i] = intervals[i][0];
+            ends[i] = intervals[i][1];
+        }
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+        int ret = 0, depth = 0;
+        int i = 0, j = 0;
+        while (i < n && j < n) {
+            if (starts[i] < ends[j]) {
+                depth++;
+                i++;
+            } else {
+                depth--;
+                j++;
+            }
+            ret = Math.max(ret, depth);
+        }
+        return ret;
+    }
+}
+
+// Greedy: heap is to store the end time to know the earliest room available
+// Time: O(NlogN)
+// Space: O(N)
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {
@@ -6,19 +42,21 @@ class Solution {
         Arrays.sort(intervals, (i1, i2) -> (i1[0] - i2[0]));
         int n = intervals.length;
         int ret = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         for (int i = 0; i < n; i++) {
-            int depth = 1;
-            for (int j = 0; j < i; j++) {
-                if (intervals[j][1] > intervals[i][0]) {
-                    depth++;
-                }
+            if (pq.isEmpty() == false && pq.peek() <= intervals[i][0]) {
+                pq.poll();
+                pq.offer(intervals[i][1]);
+            } else {
+                ret++;
+                pq.offer(intervals[i][1]);
             }
-            ret = Math.max(ret, depth);
         }
         return ret;
     }
 }
 
+// Check depth at each start, use a rank tree to compute rank in O(logN)
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {
@@ -30,7 +68,6 @@ class Solution {
         TreeNode root = null;
         for (int i = 0; i < n; i++) {
             int rank = getRank(root, intervals[i][0]);
-            System.out.println(rank);
             ret = Math.max(ret, i + 1 - rank);
             root = insert(root, intervals[i][1]);
         }
@@ -74,8 +111,9 @@ class Solution {
     }
 }
 
-
-// Heap is to store the end time to know the earliest room available
+// Check depth at each start (same as end), but only look at intervals before (after) due to sort
+// Time: O(N^2)
+// Space: O(1)
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {
@@ -84,43 +122,35 @@ class Solution {
         Arrays.sort(intervals, (i1, i2) -> (i1[0] - i2[0]));
         int n = intervals.length;
         int ret = 0;
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
         for (int i = 0; i < n; i++) {
-            if (pq.isEmpty() == false && pq.peek() <= intervals[i][0]) {
-                pq.poll();
-                pq.offer(intervals[i][1]);
-            } else {
-                ret++;
-                pq.offer(intervals[i][1]);
+            int depth = 1;
+            for (int j = 0; j < i; j++) {
+                if (intervals[j][1] > intervals[i][0]) {
+                    depth++;
+                }
             }
+            ret = Math.max(ret, depth);
         }
         return ret;
     }
 }
 
+// Check depth at each start (same as end)
+// Time: O(N^2)
+// Space: O(1)
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {
             return 0;
         }
         int n = intervals.length;
-        int[] starts = new int[n];
-        int[] ends = new int[n];
-        for (int i = 0; i < intervals.length; i++) {
-            starts[i] = intervals[i][0];
-            ends[i] = intervals[i][1];
-        }
-        Arrays.sort(starts);
-        Arrays.sort(ends);
-        int ret = 0, depth = 0;
-        int i = 0, j = 0;
-        while (i < n && j < n) {
-            if (starts[i] < ends[j]) {
-                depth++;
-                i++;
-            } else {
-                depth--;
-                j++;
+        int ret = 0;
+        for (int i = 0; i < n; i++) {
+            int depth = 0;
+            for (int j = 0; j < n; j++) {
+                if (intervals[j][0] <= intervals[i][0] && intervals[j][1] > intervals[i][0]) {
+                    depth++;
+                }
             }
             ret = Math.max(ret, depth);
         }
@@ -151,7 +181,8 @@ class Solution {
     }
 }
 
-// Wrong: [[1,2],[7,8],[1,6],[5,8],[1,6],[5,8]]
+// Attemp to intersect for an interval as many as possible
+// Wrong: [[1,2],[7,8],[1,6],[5,8],[1,6],[5,8]], expect 4, actual 3
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {
