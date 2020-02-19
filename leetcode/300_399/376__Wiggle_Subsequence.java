@@ -1,3 +1,38 @@
+// DFS + memo
+// Time: O(N)
+// Space: O(N)
+class Solution {
+    public int wiggleMaxLength(int[] nums) {
+        return dfs(nums, 0, null, new Integer[nums.length + 1][2]);
+    }
+    
+    private int dfs(int[] nums, int nbIndex, Boolean diff, Integer[][] memo) {
+        if (diff != null && memo[nbIndex][diff ? 1 : 0] != null) {
+            return memo[nbIndex][diff ? 1 : 0];
+        }
+        Integer cur = nbIndex == 0 ? null : nums[nbIndex - 1];
+        
+        int ret = 0;
+        for (int i = nbIndex; i < nums.length; i++) {
+            if (cur == null && diff == null) {
+                ret = Math.max(ret, 1 + dfs(nums, i + 1, null, memo));
+            } else if (cur != null && diff == null) {
+                if (nums[i] - cur != 0) {
+                    ret = Math.max(ret, 1 + dfs(nums, i + 1, nums[i] - cur > 0, memo));
+                }
+            } else {
+                if (nums[i] - cur != 0 && diff.equals(nums[i] - cur > 0) == false) {
+                    ret = Math.max(ret, 1 + dfs(nums, i + 1, nums[i] - cur > 0, memo));
+                }
+            }
+        }
+        if (diff != null) {
+            memo[nbIndex][diff ? 1 : 0] = ret;
+        }
+        return ret;
+    }
+}
+
 /*
 DP idea: ending with n OptUp(n) and OptDown(n)
 - OptUp(n) = max(OptDown(k), k = 1 to n -1)

@@ -4,7 +4,7 @@
 // Note: Time Limit Exceeded. Not understand why this worse than raw DFS
 class Solution {
     public int longestArithSeqLength(int[] A) {
-        HashMap<Integer, Integer>[] memo = new HashMap[A.length];
+        HashMap<Integer, Integer>[] memo = new HashMap[A.length + 1];
         for (int i = 0 ; i < memo.length; i++) {
             memo[i] = new HashMap<>();
         }
@@ -12,13 +12,11 @@ class Solution {
     }
     
     private int dfs(int[] A, int nbOffset, Integer diff, HashMap<Integer, Integer>[] memo) {
-        if (nbOffset == A.length) {
-            return 0;
-        }
         if (diff != null && memo[nbOffset].containsKey(diff)) {
             return memo[nbOffset].get(diff);
         }
         Integer cur = nbOffset == 0 ? null : A[nbOffset - 1];
+        
         int ret = 0;
         for (int i = nbOffset; i < A.length; i++) {
             if (cur == null && diff == null) {

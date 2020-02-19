@@ -25,7 +25,7 @@ Patience Sort:
 - simulate patience game (first phase of patience sort).
 - the number of piles is the result of LIS
 */
-class Solution2 {
+class Solution {
     public int lengthOfLIS(int[] nums) {
         if (nums.length == 0) {
             return 0;
@@ -71,14 +71,11 @@ class Solution2 {
 // Note: raw DFS -> Time Limit Exceed
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        Integer[] memo = new Integer[nums.length];
+        Integer[] memo = new Integer[nums.length + 1];
         return dfs(nums, 0, memo);
     }
     
     private int dfs(int[] nums, int nbIndex, Integer[] memo) {
-        if (nbIndex == nums.length) {
-            return 0;
-        }
         if (memo[nbIndex] != null) {
             return memo[nbIndex];
         }

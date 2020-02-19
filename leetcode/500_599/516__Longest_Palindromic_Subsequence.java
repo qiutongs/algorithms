@@ -24,3 +24,32 @@ class Solution {
         return dp[0][n - 1];
     }
 }
+
+// DFS + memo
+// Time: O(N^2)
+// Space: O(N^2)
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        return dfs(s, 0, s.length() - 1, new Integer[s.length()][s.length()]);
+    }
+    
+    private int dfs(String s, int nbIdx, int endIdx, Integer[][] memo) {
+        if (nbIdx > endIdx) {
+            return 0;
+        }
+        if (nbIdx == endIdx) {
+            return 1;
+        }
+        if (memo[nbIdx][endIdx] != null) {
+            return memo[nbIdx][endIdx];
+        }
+        int ret = 0;
+        if (s.charAt(nbIdx) == s.charAt(endIdx)) {
+            ret = 2 + dfs(s, nbIdx + 1, endIdx - 1, memo);
+        } else {
+            ret = Math.max(dfs(s, nbIdx + 1, endIdx, memo), dfs(s, nbIdx, endIdx - 1, memo));
+        }
+        memo[nbIdx][endIdx] = ret;
+        return ret;
+    }
+}
