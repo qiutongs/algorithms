@@ -1,3 +1,5 @@
+// Union-Find
+// Time: O()
 class Solution {
     private Map<String, String> parent = new HashMap<>();
     private Map<String, String> emailNameMap = new HashMap<>();

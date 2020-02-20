@@ -7,23 +7,41 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+// DFS
+class Solution {
     public List<String> binaryTreePaths(TreeNode root) {
-        List<String> result = new LinkedList<>();
-        binaryTreePaths(result, "", root);
-        return result;
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        List<String> ret = new LinkedList<>();
+        dfs(root, new ArrayList<>(), ret);
+        return ret;
     }
     
-    private void binaryTreePaths(List<String> result, String cur, TreeNode node){
-        if (node == null) return;
+    private void dfs(TreeNode node, List<String> curPath, List<String> ret) {
+        curPath.add(String.valueOf(node.val));
         
-        if (node.left == null && node.right == null){
-            result.add(cur+String.valueOf(node.val));
-            return;
+        if (node.left == null && node.right == null) {
+            ret.add(output(curPath));
+        }
+        if (node.left != null) {
+            dfs(node.left, curPath, ret);
+        }
+        if (node.right != null) {
+            dfs(node.right, curPath, ret);
         }
         
-        binaryTreePaths(result, cur+String.valueOf(node.val)+"->", node.left);
-        binaryTreePaths(result, cur+String.valueOf(node.val)+"->", node.right);
+        curPath.remove(curPath.size() - 1);
+    }
+    
+    private String output(List<String> path) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(path.get(0));
+        for (int i = 1; i < path.size(); i++) {
+            sb.append("->");
+            sb.append(path.get(i));
+        }
+        return sb.toString();
     }
 }
 
@@ -36,7 +54,7 @@ class Solution1 {
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution2 {
+class Solution {
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> ret = new LinkedList<>();
         

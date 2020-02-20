@@ -5,26 +5,22 @@ class Solution {
         }
         int[] cfArr = new int[26];
         for (char task : tasks) {
-            cfArr[toInt(task)]++;
+            cfArr[task - 'A']++;
         }
         
-        int maxTaskFre = 0;
+        int maxFreq = 0;
         for (int i = 0; i < cfArr.length; i++) {
-            maxTaskFre = Math.max(maxTaskFre, cfArr[i]);
+            maxFreq = Math.max(maxFreq, cfArr[i]);
         }
         
         int maxTaskCount = 0;
         for (int i = 0; i < cfArr.length; i++) {
-            if (cfArr[i] == maxTaskFre) {
+            if (cfArr[i] == maxFreq) {
                 maxTaskCount++;
             }
         }
         
-        int ret = (maxTaskFre - 1) * (n + 1) + maxTaskCount;
+        int ret = (maxFreq - 1) * (n + 1) + maxTaskCount;
         return ret > tasks.length ? ret : tasks.length;
-    }
-    
-    private int toInt(char c) {
-        return (int)(c - 'A');
     }
 }

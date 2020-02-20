@@ -1,12 +1,25 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
+// Observation: max path = left_height + right_height of some node
+// Time: O(N)
+class Solution {
+    private int ret = 0;
+    
+    public int diameterOfBinaryTree(TreeNode root) {
+        getHeight(root);
+        return ret;
+    }
+    
+    private int getHeight(TreeNode node){
+        if (node == null) {
+            return 0;
+        }
+        int leftH = getHeight(node.left);
+        int rightH = getHeight(node.right);
+        ret = Math.max(ret, leftH + rightH);
+        return 1 + Math.max(leftH, rightH);
+    }
+}
+
+// Slow
 class Solution {
     public int diameterOfBinaryTree(TreeNode root) {
         if (root == null) return 0;

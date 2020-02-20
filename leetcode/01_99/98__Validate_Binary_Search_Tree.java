@@ -59,11 +59,9 @@ class Solution2 {
         if (node == null) {
             return true;
         }
-        
         if (node.val >= max || node.val <= min) {
             return false;
         }
-        
         return isBSTHelper(node.left, node.val, min) && isBSTHelper(node.right, max, node.val);
     }
 }

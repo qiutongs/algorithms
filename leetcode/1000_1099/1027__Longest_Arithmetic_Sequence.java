@@ -4,33 +4,35 @@
 // Note: Time Limit Exceeded. Not understand why this worse than raw DFS
 class Solution {
     public int longestArithSeqLength(int[] A) {
-        HashMap<Integer, Integer>[] memo = new HashMap[A.length + 1];
+        HashMap<Integer, Integer>[] memo = new HashMap[A.length];
         for (int i = 0 ; i < memo.length; i++) {
             memo[i] = new HashMap<>();
         }
-        return dfs(A, 0, null, memo);
+        int ret = 0;
+        for (int i = 0; i < A.length; i++) {
+            ret = Math.max(ret, dfs(A, i, null, memo));
+        }
+        return ret;
     }
     
-    private int dfs(int[] A, int nbOffset, Integer diff, HashMap<Integer, Integer>[] memo) {
-        if (diff != null && memo[nbOffset].containsKey(diff)) {
-            return memo[nbOffset].get(diff);
+    private int dfs(int[] A, int curIndex, Integer diff, HashMap<Integer, Integer>[] memo) {
+        if (diff != null && memo[curIndex].containsKey(diff)) {
+            return memo[curIndex].get(diff);
         }
-        Integer cur = nbOffset == 0 ? null : A[nbOffset - 1];
         
-        int ret = 0;
-        for (int i = nbOffset; i < A.length; i++) {
-            if (cur == null && diff == null) {
-                ret = Math.max(ret, 1 + dfs(A, i + 1, null, memo));
-            } else if (cur != null && diff == null) {
-                ret = Math.max(ret, 1 + dfs(A, i + 1, A[i] - cur, memo));
+        int subret = 0;
+        for (int i = curIndex + 1; i < A.length; i++) {
+            if (diff == null) {
+                subret = Math.max(subret, dfs(A, i, A[i] - A[curIndex], memo));
             } else {
-                if (A[i] - cur == diff) {
-                    ret = Math.max(ret, 1 + dfs(A, i + 1, diff, memo));
+                if (A[i] - A[curIndex] == diff.intValue()) {
+                    subret = Math.max(subret, dfs(A, i, diff, memo));
                 }
             }
         }
+        int ret = subret + 1;
         if (diff != null) {
-            memo[nbOffset].put(diff, ret);
+            memo[curIndex].put(diff, ret);
         }
         return ret;
     }

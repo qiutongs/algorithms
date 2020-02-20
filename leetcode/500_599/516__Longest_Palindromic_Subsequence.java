@@ -33,23 +33,22 @@ class Solution {
         return dfs(s, 0, s.length() - 1, new Integer[s.length()][s.length()]);
     }
     
-    private int dfs(String s, int nbIdx, int endIdx, Integer[][] memo) {
-        if (nbIdx > endIdx) {
+    private int dfs(String s, int lIndex, int rIndex, Integer[][] memo) {
+        if (lIndex > rIndex) {
             return 0;
-        }
-        if (nbIdx == endIdx) {
+        } else if (lIndex == rIndex) {
             return 1;
         }
-        if (memo[nbIdx][endIdx] != null) {
-            return memo[nbIdx][endIdx];
+        if (memo[lIndex][rIndex] != null) {
+            return memo[lIndex][rIndex];
         }
         int ret = 0;
-        if (s.charAt(nbIdx) == s.charAt(endIdx)) {
-            ret = 2 + dfs(s, nbIdx + 1, endIdx - 1, memo);
+        if (s.charAt(lIndex) == s.charAt(rIndex)) {
+            ret = 2 + dfs(s, lIndex + 1, rIndex - 1, memo);
         } else {
-            ret = Math.max(dfs(s, nbIdx + 1, endIdx, memo), dfs(s, nbIdx, endIdx - 1, memo));
+            ret = Math.max(dfs(s, lIndex + 1, rIndex, memo), dfs(s, lIndex, rIndex - 1, memo));
         }
-        memo[nbIdx][endIdx] = ret;
+        memo[lIndex][rIndex] = ret;
         return ret;
     }
 }

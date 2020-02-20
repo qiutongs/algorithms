@@ -18,6 +18,7 @@
  * }
  */
 // Recursion + memo 
+// Time: 6ms
 class Solution {
     private HashMap<TreeNode, Integer> memo = new HashMap<>();
     
@@ -55,6 +56,7 @@ class Solution {
 }
 
 // Raw Recursion
+// Time: 238 ms
 class Solution {
     public int maxPathSum(TreeNode root) {
         if (root == null) return Integer.MIN_VALUE;

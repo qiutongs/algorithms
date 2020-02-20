@@ -71,22 +71,25 @@ class Solution {
 // Note: raw DFS -> Time Limit Exceed
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        Integer[] memo = new Integer[nums.length + 1];
-        return dfs(nums, 0, memo);
+        int ret = 0;
+        Integer[] memo = new Integer[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            ret = Math.max(ret, dfs(nums, i, memo));
+        }
+        return ret;
     }
     
-    private int dfs(int[] nums, int nbIndex, Integer[] memo) {
-        if (memo[nbIndex] != null) {
-            return memo[nbIndex];
+    private int dfs(int[] nums, int curIndex, Integer[] memo) {
+        if (memo[curIndex] != null) {
+            return memo[curIndex];
         }
-        int cur = nbIndex == 0 ? Integer.MIN_VALUE : nums[nbIndex - 1];
-        int ret = 0;
-        for (int i = nbIndex; i < nums.length; i++) {
-            if (nums[i] > cur) {
-                ret = Math.max(ret, 1 + dfs(nums, i + 1, memo));
+        int subret = 0;
+        for (int i = curIndex + 1; i < nums.length; i++) {
+            if (nums[i] > nums[curIndex]) {
+                subret = Math.max(subret, dfs(nums, i, memo));
             }
         }
-        memo[nbIndex] = ret;
-        return ret;
+        memo[curIndex] = subret + 1;
+        return memo[curIndex];
     }
 }
