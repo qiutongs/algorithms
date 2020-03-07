@@ -1,3 +1,6 @@
+// DFS: bipartitle <=> no odd-length cycle
+// Time: O(V + E)
+// Space: O(V)
 class Solution {
     public boolean isBipartite(int[][] graph) {
         if (graph == null || graph.length == 0) {
