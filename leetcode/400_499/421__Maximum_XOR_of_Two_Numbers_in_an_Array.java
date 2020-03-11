@@ -1,71 +1,52 @@
+// Bit Trie
+// Time: O(N)
+// Space: O(N)
 class Solution {
     public int findMaximumXOR(int[] nums) {
-        BitTrieNode bitTrieRoot = new BitTrieNode();
-        int result = 0;
-        
+        TrieNode root = new TrieNode();
         for (int num : nums) {
-            add(bitTrieRoot, num);
+            insert(root, num);
         }
         
+        int ret = 0;
         for (int num : nums) {
-            result = Math.max(result, num ^ getMaxMatch(bitTrieRoot, num));
+            ret = Math.max(ret, num ^ getMaxMatch(root, num));
         }
-        
-        return result;
+        return ret;
     }
     
-    private void add(BitTrieNode root, int val) {
-        BitTrieNode curTrieNode = root;
-        int originalVal = val;
-        
-        int i = 32;
-        while(i > 0) {
-            int highestDigit = val >>> 31;
-            val <<= 1;
-            
-            if (highestDigit == 0) {
-                if (curTrieNode.left == null) {
-                    curTrieNode.left = new BitTrieNode();
-                }
-                
-                curTrieNode = curTrieNode.left;
-            } else {
-                if (curTrieNode.right == null) {
-                    curTrieNode.right = new BitTrieNode();
-                }
-                
-                curTrieNode = curTrieNode.right;
+    private int getMaxMatch(TrieNode root, int val) {
+        TrieNode cur = root;
+        for (int i = 0; i < 32; i++) {
+            int mask = 0x80000000 >>> i;
+            int bit = (val & mask) == 0 ? 0 : 1;
+            int flip = bit == 1 ? 0 : 1;
+            cur = cur.get(flip) != null ? cur.get(flip) : cur.get(bit);
+        }
+        return cur.val;
+    }
+    
+    private void insert(TrieNode root, int val) {
+        TrieNode cur = root;
+        for (int i = 0; i < 32; i++) {
+            int mask = 0x80000000 >>> i;
+            int bit = (val & mask) == 0 ? 0 : 1;
+            cur.addIfAbsent(bit);
+            cur = cur.get(bit);
+        }
+        cur.val = val;
+    }
+    
+    private class TrieNode {
+        TrieNode[] childs = new TrieNode[2];
+        int val = 0;
+        void addIfAbsent(int bit) {
+            if (childs[bit] == null) {
+                childs[bit] = new TrieNode();
             }
-            
-            i--;
         }
-        
-        curTrieNode.val = originalVal;
-    }
-    
-    private int getMaxMatch(BitTrieNode root, int val) {
-        BitTrieNode curTrieNode = root;
-        
-        int i = 32;
-        while(i > 0) {
-            int highestDigit = val >>> 31;
-            val <<= 1;
-
-            if (highestDigit == 0) {
-                curTrieNode = curTrieNode.right != null ? curTrieNode.right : curTrieNode.left;
-            } else {
-                curTrieNode = curTrieNode.left != null ? curTrieNode.left : curTrieNode.right;
-            }
-            
-            i--;
+        TrieNode get(int bit) {
+            return childs[bit];
         }
-        
-        return curTrieNode.val;
-    }
-    
-    private class BitTrieNode {
-        BitTrieNode left = null;
-        BitTrieNode right = null;
-        Integer val = null;
     }
 }

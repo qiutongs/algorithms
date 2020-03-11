@@ -1,7 +1,7 @@
 /*
  * a + b = a ^ b + ( a & b << 1 )
  */
-class Solution2 {
+class Solution {
     public int getSum(int a, int b) {
         if (b == 0) {
             return a;
@@ -14,7 +14,7 @@ class Solution2 {
 /*
  * My first naive thought but incorrect because it uses '+'
  */
-class Solution1 {
+class Solution {
     public int getSum(int a, int b) {
         long ret = 0;
         long la = Integer.toUnsignedLong(a), lb = Integer.toUnsignedLong(b);

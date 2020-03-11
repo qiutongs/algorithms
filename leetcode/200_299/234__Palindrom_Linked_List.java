@@ -11,17 +11,20 @@ class Solution {
         if (head == null) {
             return true;
         }
-        ListNode mid = getMid(head);
+        ListNode mid = getMidLeft(head);
         ListNode tail = reverse(mid);
 
-        while(head != mid && head.val == tail.val) {
+        while(head != null) {
+            if (head.val != tail.val) {
+                return false;
+            }
             head = head.next;
             tail = tail.next;
         }
-        return head == mid && head.val == tail.val;
+        return true;
     }
     
-    private ListNode getMid(ListNode head) {
+    private ListNode getMidLeft(ListNode head) {
         ListNode slow = head, fast = head;
         while(fast.next != null && fast.next.next != null) {
             slow = slow.next;

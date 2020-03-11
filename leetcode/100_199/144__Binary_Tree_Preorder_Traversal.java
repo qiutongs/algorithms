@@ -1,12 +1,3 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
 class Solution {
     public List<Integer> preorderTraversal(TreeNode root) {
         if (root == null) {
@@ -14,9 +5,7 @@ class Solution {
         }
         
         List<Integer> ret = new LinkedList<>();
-        
         Stack<TreeNode> stack = new Stack<>();
-        
         stack.push(root);
         
         while(stack.isEmpty() == false) {
@@ -26,7 +15,6 @@ class Solution {
             if (topNode.right != null) {
                 stack.push(topNode.right);
             }
-            
             if (topNode.left != null) {
                 stack.push(topNode.left);
             }

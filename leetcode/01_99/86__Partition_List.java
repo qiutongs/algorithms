@@ -11,32 +11,24 @@ class Solution {
         if (head == null) {
             return null;
         }
-        
-        ListNode dummy = new ListNode(0);
-        ListNode tail = dummy;
+        ListNode dummy1 = new ListNode(0);
+        ListNode tail1 = dummy1;
+        ListNode dummy2 = new ListNode(0);
+        ListNode tail2 = dummy2;
         
         ListNode cur = head;
-        ListNode prev = null;
-        
-        ListNode rightHead = null;
-        
         while(cur != null) {
             if (cur.val < x) {
-                if (prev != null) {
-                    prev.next = cur.next;
-                }
-                tail.next = cur;
-                tail = cur;
+                tail1.next = cur;
+                tail1 = cur;
             } else {
-                if (rightHead == null) {
-                    rightHead = cur;
-                }
-                prev = cur;
+                tail2.next = cur;
+                tail2 = cur;
             }
             cur = cur.next;
         }
-        
-        tail.next = rightHead;
-        return dummy.next;
+        tail1.next = dummy2.next;
+        tail2.next = null;
+        return dummy1.next;
     }
 }

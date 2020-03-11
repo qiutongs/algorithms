@@ -23,27 +23,25 @@ class Solution {
             newHead.next = newHead;
             return newHead;
         }
-        Node prev = head, cur = head.next;
+        Node cur = head, next = head.next;
         do {
-            // Note: cur == head is the edge case that no proper insertion point has been found.
-            // It implies this all nodes have same value  
-            if (inbetween(prev, cur, insertVal) || inboundary(prev, cur, insertVal) || cur == head) {
+            if (inbetween(cur, next, insertVal) || inboundary(cur, next, insertVal) || next == head) {
                 Node newNode = new Node(insertVal);
-                prev.next = newNode;
-                newNode.next = cur;
+                cur.next = newNode;
+                newNode.next = next;
                 break;
             }
-            prev = cur;
-            cur = cur.next;
-        } while(prev != head);
+            cur = next;
+            next = next.next;
+        } while(cur != head);
         return head;
     }
                 
-    private boolean inbetween(Node prev, Node cur, int insertVal) {
-        return prev.val <= insertVal && cur.val >= insertVal;
+    private boolean inbetween(Node cur, Node next, int insertVal) {
+        return cur.val <= insertVal && next.val >= insertVal;
     }
                 
-    private boolean inboundary(Node prev, Node cur, int insertVal) {
-        return prev.val > cur.val && (insertVal >= prev.val || insertVal <= cur.val);
+    private boolean inboundary(Node cur, Node next, int insertVal) {
+        return cur.val > next.val && (insertVal >= cur.val || insertVal <= next.val);
     }
 }
