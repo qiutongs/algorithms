@@ -7,7 +7,7 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+class Solution {
     private TreeNode dummyHead = new TreeNode(0);
     private TreeNode tail = dummyHead;
     
@@ -28,7 +28,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
+class Solution {
     public void flatten(TreeNode root) {
         flattenHelper(root);
     }

@@ -40,3 +40,24 @@ class Solution {
         return -1;
     }
 }
+
+class Solution {
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        if (inorder.length == 0) {
+            return null;
+        }
+        return helper(postorder, inorder, new int[]{postorder.length - 1}, new int[]{inorder.length - 1}, Integer.MAX_VALUE);
+    }
+    
+    private TreeNode helper(int[] postorder, int[] inorder, int[] postIdx, int[] inIdx, int parentVal) {
+        if (postIdx[0] == -1 || inorder[inIdx[0]] == parentVal) {
+            return null;
+        }
+        TreeNode ret = new TreeNode(postorder[postIdx[0]]);
+        postIdx[0]--;
+        ret.right = helper(postorder, inorder, postIdx, inIdx, ret.val);
+        inIdx[0]--;
+        ret.left = helper(postorder, inorder, postIdx, inIdx, parentVal);
+        return ret;
+    }
+}

@@ -18,7 +18,7 @@
  * }
  */
 
-public class Solution1 {
+public class Solution {
     private DoublyListNode dummyHead = new DoublyListNode(0);
     private DoublyListNode tail = dummyHead;
     
@@ -46,7 +46,7 @@ public class Solution1 {
     }
 }
 
-public class Solution2 {
+public class Solution {
     /**
      * @param root: The root of tree
      * @return: the head of doubly list node

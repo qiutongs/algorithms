@@ -123,6 +123,55 @@ public class Codec {
     }
 }
 
+// DFS Preorder + NULL
+// Ref: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/366036/java-preorder
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        preorder(root, sb);
+        return sb.toString();
+    }
+    
+    private void preorder(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append("#");
+            sb.append(",");
+            return;
+        }
+        sb.append(node.val);
+        sb.append(",");
+        preorder(node.left, sb);
+        preorder(node.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data == null || data.isEmpty()) {
+            return null;
+        }
+        return dfs(data.split(","), new int[]{0});
+    }
+    
+    private TreeNode dfs(String[] preorder, int[] offset) {
+        String curValStr = preorder[offset[0]];
+        if (curValStr.equals("#")) {
+            offset[0]++;
+            return null;
+        }
+        TreeNode ret = new TreeNode(Integer.valueOf(curValStr));
+        offset[0]++;
+        ret.left = dfs(preorder, offset);
+        ret.right = dfs(preorder, offset);
+        return ret;
+    }
+}
+
+
 // BFS + not adding trailing null
 public class Codec {
 
@@ -241,53 +290,6 @@ public class Codec {
     }
 }
 
-// DFS Preorder + NULL
-// Ref: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/366036/java-preorder
-public class Codec {
-
-    // Encodes a tree to a single string.
-    public String serialize(TreeNode root) {
-        if (root == null) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        preorder(root, sb);
-        return sb.toString();
-    }
-    
-    private void preorder(TreeNode node, StringBuilder sb) {
-        if (node == null) {
-            sb.append("#");
-            sb.append(",");
-            return;
-        }
-        sb.append(node.val);
-        sb.append(",");
-        preorder(node.left, sb);
-        preorder(node.right, sb);
-    }
-
-    // Decodes your encoded data to tree.
-    public TreeNode deserialize(String data) {
-        if (data == null || data.isEmpty()) {
-            return null;
-        }
-        return dfs(data.split(","), new int[]{0});
-    }
-    
-    private TreeNode dfs(String[] preorder, int[] offset) {
-        String curValStr = preorder[offset[0]];
-        if (curValStr.equals("#")) {
-            offset[0]++;
-            return null;
-        }
-        TreeNode ret = new TreeNode(Integer.valueOf(curValStr));
-        offset[0]++;
-        ret.left = dfs(preorder, offset);
-        ret.right = dfs(preorder, offset);
-        return ret;
-    }
-}
 
 // Your Codec object will be instantiated and called as such:
 // Codec codec = new Codec();

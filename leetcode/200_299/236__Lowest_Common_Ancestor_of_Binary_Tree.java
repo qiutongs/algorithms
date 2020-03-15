@@ -7,7 +7,7 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution1 {
+class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         return lcaHelper(root, p, q).lca;
     }
@@ -56,7 +56,7 @@ class Solution1 {
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution2 {
+class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         return findLCAorPorQ(root, p, q);
     }

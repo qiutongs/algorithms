@@ -7,6 +7,7 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
+// Time: O(logN * logN)
 class Solution {
     public int countNodes(TreeNode root) {
         if (root == null) {

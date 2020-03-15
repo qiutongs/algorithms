@@ -35,24 +35,17 @@ public class Codec {
             return null;
         }
         String[] strs = data.split(",");
-        int[] vals = new int[strs.length];
-        for (int i = 0; i < strs.length; i++) {
-            vals[i] = Integer.valueOf(strs[i]);
-        }
-        return deserialize(vals, 0, vals.length - 1);
+        return deserialize(strs, new int[]{0}, Integer.MAX_VALUE);
     }
     
-    private TreeNode deserialize(int[] vals, int l, int r) {
-        if (l > r) {
+    private TreeNode deserialize(String[] strs, int[] index, int max) {
+        if (index[0] == strs.length || Integer.valueOf(strs[index[0]]) > max) {
             return null;
         }
-        TreeNode ret = new TreeNode(vals[l]);
-        int i = l;
-        while(i + 1 <= r && vals[i + 1] < vals[l]) {
-            i++;
-        }
-        ret.left = deserialize(vals, l + 1, i);
-        ret.right = deserialize(vals, i + 1, r);
+        TreeNode ret = new TreeNode(Integer.valueOf(strs[index[0]]));
+        index[0]++;
+        ret.left = deserialize(strs, index, ret.val);
+        ret.right = deserialize(strs, index, max);
         return ret;
     }
 }
