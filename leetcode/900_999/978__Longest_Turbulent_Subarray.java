@@ -1,4 +1,4 @@
-/* Sliding window */
+/* Jump window */
 class Solution {
     public int maxTurbulenceSize(int[] A) {
         if (A == null || A.length == 0) {

@@ -1,3 +1,6 @@
+// Min heap
+// Time: O(NlogK)
+// Space: O(K)
 class Solution {
     public int[][] kClosest(int[][] points, int K) {
         if (points == null || points.length == 0) {
@@ -19,7 +22,8 @@ class Solution {
 }
 
 // Quick select
-// Time: expected O(N)
+// Time: worst O(N) expected O(N) 4ms
+// Space: worst O(N) expected O(logN)
 class Solution {
     private final Random rand = new Random();
     

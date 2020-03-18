@@ -1,20 +1,20 @@
 class TopVotedCandidate {
-
     private final int[] leadings;
     private final int[] times;
     
     public TopVotedCandidate(int[] persons, int[] times) {
         this.times = times;
         this.leadings = new int[times.length];
-        HashMap<Integer, Integer> votesMap = new HashMap<>();
+        
         int curMax = 0;
-        int curLead = 0;
+        int curLead = -1;
+        
+        int[] votes = new int[persons.length];
         for (int i = 0; i < times.length; i++) {
-            int vote = votesMap.getOrDefault(persons[i], 0);
-            votesMap.put(persons[i], vote + 1);
-            if (vote >= curMax) {
+            votes[persons[i]]++;
+            if (votes[persons[i]] >= curMax) {
+                curMax = votes[persons[i]];
                 curLead = persons[i];
-                curMax = vote;
             }
             leadings[i] = curLead;
         }

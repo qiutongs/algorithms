@@ -1,5 +1,28 @@
 class Solution {
     public int numTrees(int n) {
+        return dfs(n, new Integer[n + 1]);
+    }
+    
+    private int dfs(int n, Integer[] memo) {
+        if (n == 0) {
+            return 1;
+        } else if (n == 1) {
+            return 1;
+        }
+        if (memo[n] != null) {
+            return memo[n];
+        }
+        int ret = 0;
+        for (int root = 1; root <= n; root++) {
+            ret += dfs(root - 1, memo) * dfs(n - root, memo);
+        }
+        memo[n] = ret;
+        return ret;
+    }
+}
+
+class Solution {
+    public int numTrees(int n) {
         if (n <= 0) {
             return 0;
         }

@@ -1,5 +1,8 @@
 // BFS
 class Solution {
+    private static final int[] deltaX = {1, -1, 0, 0};
+    private static final int[] deltaY = {0, 0, 1, -1};
+    
     public int orangesRotting(int[][] grid) {
         if (grid.length == 0 || grid[0].length == 0) {
             return 0;
@@ -14,11 +17,8 @@ class Solution {
             }
         }
         
-        int[] deltaX = {1, -1, 0, 0};
-        int[] deltaY = {0, 0, 1, -1};
         int level = 0;
         while(q.isEmpty() == false) {
-            level++;
             int size = q.size();
             for (int i = 0; i < size; i++) {
                 int[] node = q.poll();
@@ -31,6 +31,9 @@ class Solution {
                     }
                 }
             }
+            if (q.isEmpty() == false) {
+                level++;
+            }
         }
         
         for (int i = 0; i < m; i++) {
@@ -40,6 +43,6 @@ class Solution {
                 }
             }
         }
-        return level == 0 ? 0 : level - 1;
+        return level;
     }
 }
