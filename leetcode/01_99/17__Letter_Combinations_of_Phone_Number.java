@@ -10,15 +10,15 @@ class Solution {
         return ret;
     }
 
-    private void dfs(String digits, int offset, StringBuilder curStr, List<String> ret) {
-        if (offset == digits.length()) {
+    private void dfs(String digits, int index, StringBuilder curStr, List<String> ret) {
+        if (index == digits.length()) {
             ret.add(curStr.toString());
             return;
         }
-        String letters = PHONE_DIC[((int)(digits.charAt(offset) - '2'))];
+        String letters = PHONE_DIC[((int)(digits.charAt(index) - '2'))];
         for (int i = 0; i < letters.length(); i++) {
             curStr.append(letters.charAt(i));
-            dfs(digits, offset + 1, curStr, ret);
+            dfs(digits, index + 1, curStr, ret);
             curStr.deleteCharAt(curStr.length() - 1);
         }
     }

@@ -1,8 +1,46 @@
+// Raw DFS
+// Time Limit Exceeded
+class Solution {
+    public List<List<String>> wordSquares(String[] words) {
+        if (words == null || words.length == 0) {
+            return Collections.emptyList();
+        }
+        List<List<String>> ret = new ArrayList<>();
+        dfs(words, new ArrayList<>(), ret);
+        return ret;
+    }
+    
+    private void dfs(String[] words, List<String> curList, List<List<String>> ret) {
+        if (curList.size() == words[0].length()) {
+            ret.add(new ArrayList<>(curList));
+            return;
+        }
+        for (int i = 0; i < words.length; i++) {
+            if (valid(curList, words[i])) {
+                curList.add(words[i]);
+                dfs(words, curList, ret);
+                curList.remove(curList.size() - 1);
+            }
+        }
+    }
+    
+    private boolean valid(List<String> curList, String word) {
+        int sIdx = curList.size();
+        for (int i = 0; i < curList.size(); i++) {
+            if (word.charAt(i) != curList.get(i).charAt(sIdx)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+// Trie: better prefix match instead of scanning the entire input array
 class Solution {
     public List<List<String>> wordSquares(String[] words) {
         TrieNode root = new TrieNode();
-        for (int i = 0; i < words.length; i++) {
-            insert(root, words[i], i);
+        for (String word : words) {
+            insert(root, word);
         }
         
         List<List<String>> ret = new ArrayList<>();
@@ -10,42 +48,50 @@ class Solution {
         return ret;
     }
     
-    private void dfs(String[] words, TrieNode root, List<Integer> curList, List<List<String>> ret) {
+    private void dfs(String[] words, TrieNode root, List<String> curList, List<List<String>> ret) {
         if (curList.size() == words[0].length()) {
-            List<String> ans = new ArrayList<>(curList.size());
-            for (Integer index : curList) {
-                ans.add(words[index]);
-            }
-            ret.add(ans);
+            ret.add(new ArrayList<>(curList));
             return;
         }
-        for (Integer index : search(words, root, curList)) {
-            curList.add(index);
+        String prefix = toPrefix(curList);
+        TrieNode node = search(root, prefix);
+        List<String> matchedWords = new ArrayList<>();
+        dfs(node, matchedWords);
+        
+        for (String word : matchedWords) {
+            curList.add(word);
             dfs(words, root, curList, ret);
             curList.remove(curList.size() - 1);
         }
     }
     
-    private List<Integer> search(String[] words, TrieNode root, List<Integer> curList) {
-        List<Integer> ret = new ArrayList<>();
-        TrieNode cur = root;
-        int offset = curList.size();
-        for (Integer index : curList) {
-            cur = cur.get(words[index].charAt(offset));
-            if (cur == null) {
-                break;
-            }
+    private String toPrefix(List<String> curList) {
+        int idx = curList.size();
+        StringBuilder sb = new StringBuilder();
+        for (String word : curList) {
+            sb.append(word.charAt(idx));
         }
-        dfs(cur, ret);
-        return ret;
+        return sb.toString();
     }
     
-    private void dfs(TrieNode node, List<Integer> ret) {
+    private TrieNode search(TrieNode root, String prefix) {
+        TrieNode cur = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            char c = prefix.charAt(i);
+            cur = cur.get(c);
+            if (cur == null) {
+                return null;
+            }
+        }
+        return cur;
+    }
+    
+    private void dfs(TrieNode node, List<String> ret) {
         if (node == null) {
             return;
         }
-        if (node.isKey) {
-            ret.add(node.index);
+        if (node.word != null) {
+            ret.add(node.word);
         }
         for (TrieNode child : node.childs) {
             if (child != null) {
@@ -54,21 +100,19 @@ class Solution {
         }
     }
     
-    private void insert(TrieNode root, String word, int index) {
+    private void insert(TrieNode root, String word) {
         TrieNode cur = root;
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
             cur.addIfAbsent(c);
             cur = cur.get(c);
         }
-        cur.isKey = true;
-        cur.index = index;
+        cur.word = word;
     }
     
     private class TrieNode {
         TrieNode[] childs = new TrieNode[26];
-        boolean isKey = false;
-        int index = -1;
+        String word;
         
         void addIfAbsent(char c) {
             if (childs[c - 'a'] == null) {

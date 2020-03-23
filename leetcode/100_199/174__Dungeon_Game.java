@@ -23,27 +23,3 @@ class Solution {
         return ret;
     }
 }
-
-
-// DFS + memo
-class Solution {
-    public int minimumTotal(List<List<Integer>> triangle) {
-        Integer[][] memo = new Integer[triangle.size()][];
-        for (int i = 0; i < memo.length; i++) {
-            memo[i] = new Integer[i + 1];
-        }
-        return dfs(triangle, 0, 0, memo);
-    }
-    
-    private int dfs(List<List<Integer>> triangle, int x, int y, Integer[][] memo) {
-        if (memo[x][y] != null) {
-            return memo[x][y];
-        }
-        if (x == triangle.size() - 1) {
-            return triangle.get(x).get(y);
-        }
-        int ret = triangle.get(x).get(y) + Math.min(dfs(triangle, x + 1, y, memo), dfs(triangle, x + 1, y + 1, memo));
-        memo[x][y] = ret;
-        return ret;
-    }
-}

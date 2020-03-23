@@ -6,7 +6,7 @@
  * Time: O(N)
  * Space: O(N)
  */
-class Solution1 {
+class Solution {
     public int kthGrammar(int N, int K) {
         int[] parentsIndex = new int[N];
         int result = 0;
@@ -32,7 +32,7 @@ class Solution1 {
  * Time O(N)
  * Space O(N)
  */
-class Solution2 {
+class Solution {
     public int kthGrammar(int N, int K) {
         if (N == 1) {
             return 0;

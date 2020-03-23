@@ -1,24 +1,17 @@
-/* DP 
-*/
+// DP
 class Solution {
     public int maximumSum(int[] arr) {
-        if (arr == null || arr.length == 0) {
-            return 0;
-        }
+        int[][] dp = new int[arr.length][2];
+        dp[0][0] = arr[0];
+        dp[0][1] = 0;
         
-        int maxNoDel = arr[0], maxOneDel = 0;
-        int ret = arr[0];
-        
+        int ret = dp[0][0];
         for (int i = 1; i < arr.length; i++) {
-            // already deleted one or delete current
-            maxOneDel = Math.max(maxOneDel + arr[i], maxNoDel);
-            // no delete at all
-            maxNoDel = maxNoDel < 0 ? arr[i] : maxNoDel + arr[i];
-            
-            ret = Math.max(ret, maxOneDel);
-            ret = Math.max(ret, maxNoDel);
+            dp[i][0] = dp[i - 1][0] < 0 ? arr[i] : dp[i - 1][0] + arr[i];
+            dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1] + arr[i]);
+            ret = Math.max(ret, dp[i][0]);
+            ret = Math.max(ret, dp[i][1]);
         }
-        
         return ret;
     }
 }

@@ -5,19 +5,19 @@ class Solution {
         }
         Arrays.sort(nums);
         List<List<Integer>> ret = new ArrayList<>();
-        dfs(nums, 0, new ArrayList<>(), ret);
+        dfs(nums, -1, new ArrayList<>(), ret);
         return ret;
     }
     
-    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
+    private void dfs(int[] nums, int index, List<Integer> curList, List<List<Integer>> ret) {
         ret.add(new ArrayList<>(curList));
 
-        for (int i = offset; i < nums.length; i++) {
-            if (i > offset && nums[i] == nums[i - 1]) {
+        for (int i = index + 1; i < nums.length; i++) {
+            if (i > index + 1 && nums[i] == nums[i - 1]) {
                 continue;
             }
             curList.add(nums[i]);
-            dfs(nums, i + 1, curList, ret);
+            dfs(nums, i, curList, ret);
             curList.remove(curList.size() - 1);
         }
     }

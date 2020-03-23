@@ -8,16 +8,16 @@ class Solution {
             return Collections.emptyList();
         }
         List<List<Integer>> ret = new ArrayList<>();
-        dfs(nums, 0, new ArrayList<>(), ret);
+        dfs(nums, -1, new ArrayList<>(), ret);
         return ret;
     }
     
-    private void dfs(int[] nums, int offset, List<Integer> curList, List<List<Integer>> ret) {
+    private void dfs(int[] nums, int index, List<Integer> curList, List<List<Integer>> ret) {
         ret.add(new ArrayList<>(curList));
         
-        for (int i = offset; i < nums.length; i++) {
+        for (int i = index + 1; i < nums.length; i++) {
             curList.add(nums[i]);
-            dfs(nums, i + 1, curList, ret);
+            dfs(nums, i, curList, ret);
             curList.remove(curList.size() - 1);
         }
     }

@@ -1,4 +1,6 @@
 // DFS + full memo
+// Time: 7ms
+// Space: 41MB
 class Solution {
     private List<List<String>>[] memo;
     
@@ -49,6 +51,8 @@ class Solution {
 }
 
 // DFS + true/false memo
+// Time: 7ms
+// Space: 41MB
 class Solution {
     private Boolean[] memo;
     

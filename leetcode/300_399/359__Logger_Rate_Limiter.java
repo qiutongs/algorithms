@@ -1,3 +1,4 @@
+// Time: shouldPrintMessage - O(1)
 class Logger {
     private HashSet<String>[] win = new HashSet[10];
     private int[] timestamps = new int[10];

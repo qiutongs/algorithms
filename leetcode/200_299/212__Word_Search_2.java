@@ -1,5 +1,8 @@
 // https://leetcode.com/problems/word-search-ii/discuss/59780/Java-15ms-Easiest-Solution-(100.00)
 class Solution {
+    private static final int[] deltaX = {1, -1, 0, 0};
+    private static final int[] deltaY = {0, 0, 1, -1};
+    
     public List<String> findWords(char[][] board, String[] words) {
         TrieNode root = new TrieNode();
         buildTrie(root, words);
@@ -9,38 +12,33 @@ class Solution {
         boolean[][] visited = new boolean[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                dfs(board, i, j, visited, root, new StringBuilder(), ret);
+                if (root.get(board[i][j]) != null) {
+                    dfs(board, i, j, visited, root.get(board[i][j]), new StringBuilder(), ret);
+                }
             }
         }
         return ret;
     }
     
-    private void dfs(char[][] board, int x, int y, boolean[][] visited, TrieNode parent, StringBuilder sb, List<String> ret) {
-        if (inbound(board, x, y) == false || parent.get(board[x][y]) == null || visited[x][y]) {
-            return;
-        }
-
+    private void dfs(char[][] board, int x, int y, boolean[][] visited, TrieNode cur, StringBuilder sb, List<String> ret) {
         visited[x][y] = true;
         sb.append(board[x][y]);
         
-        try {
-            TrieNode node = parent.get(board[x][y]);
-            if (node.isKey) {
-                ret.add(sb.toString());
-                node.isKey = false;
-            }
-
-            int[] deltaX = {0, 0, 1, -1};
-            int[] deltaY = {1, -1, 0, 0};
-            for (int i = 0; i < 4; i++) {
-                int x1 = x + deltaX[i];
-                int y1 = y + deltaY[i];
-                dfs(board, x1, y1, visited, node, sb, ret);
-            }
-        } finally {
-            sb.deleteCharAt(sb.length() - 1);
-            visited[x][y] = false;
+        if (cur.isKey) {
+            ret.add(sb.toString());
+            cur.isKey = false;
         }
+
+        for (int i = 0; i < 4; i++) {
+            int x1 = x + deltaX[i];
+            int y1 = y + deltaY[i];
+            if (inbound(board, x1, y1) && cur.get(board[x1][y1]) != null && visited[x1][y1] == false) {
+                dfs(board, x1, y1, visited, cur.get(board[x1][y1]), sb, ret);
+            }
+        }
+        
+        sb.deleteCharAt(sb.length() - 1);
+        visited[x][y] = false;
     }
     
     private boolean inbound(char[][] board, int x, int y) {

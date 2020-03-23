@@ -1,4 +1,4 @@
-/* tweaked sliding window */
+/* Jump window */
 class Solution {
     public int numSubarrayBoundedMax(int[] A, int L, int R) {
         if (A == null || A.length == 0) {
@@ -21,10 +21,8 @@ class Solution {
     }
 }
 
-/*
- * This is actually number of subarray SUM with bounded max
- */
-class Solution2 {
+// Wrong: This is actually number of subarray SUM with bounded max
+class Solution {
     public int numSubarrayBoundedMax(int[] A, int L, int R) {
         if (A == null || A.length == 0) {
             return 0;

@@ -1,3 +1,4 @@
+// Array to simulate stack for easy check top 2 elements
 class Solution {
     public boolean isValid(String S) {
         if (S == null || S.isEmpty()) {

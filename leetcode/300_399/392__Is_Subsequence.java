@@ -57,4 +57,6 @@ Follow up: pre-process t with some data structure fast for query.
 1. hashtable: 
 - character -> sorted index list in t
 - for each one, the time is O(|s| * log(|t|)), total is O(k(s * log(t)))
+
+Ref: https://leetcode.com/problems/is-subsequence/discuss/87268/Java-code-for-the-follow-up-question
 */

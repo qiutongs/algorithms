@@ -1,3 +1,34 @@
+// Raw DFS
+// Time Limit Exceeded: 
+// "bbbbbbbabbaabbabbbbaaabbabbabaaabbababbbabbbabaaabaab"
+// "b*b*ab**ba*b**b***bba"
+class Solution {
+    public boolean isMatch(String s, String p) {
+        return isMatch(s, 0, p, 0);
+    }
+    
+    private boolean isMatch(String s, int sOffset, String p, int pOffset) {
+        if (pOffset == p.length()) {
+            return sOffset == s.length();
+        }
+        if (p.charAt(pOffset) == '*') {
+            while(sOffset <= s.length()) {
+                if (isMatch(s, sOffset, p, pOffset + 1)) {
+                    return true;
+                }
+                sOffset++;
+            }
+            return false;
+        } else {
+            if (sOffset < s.length() && (s.charAt(sOffset) == p.charAt(pOffset) || p.charAt(pOffset) == '?')) {
+                return isMatch(s, sOffset + 1, p, pOffset + 1);
+            } else {
+                return false;
+            }
+        }
+    }
+}
+
 // DFS + memo
 class Solution {
     private Boolean[][] memo;
@@ -33,36 +64,5 @@ class Solution {
         }
         memo[sOffset][pOffset] = ret;
         return ret;
-    }
-}
-
-// Raw DFS
-// Time Limit Exceeded: 
-// "bbbbbbbabbaabbabbbbaaabbabbabaaabbababbbabbbabaaabaab"
-// "b*b*ab**ba*b**b***bba"
-class Solution {
-    public boolean isMatch(String s, String p) {
-        return isMatch(s, 0, p, 0);
-    }
-    
-    private boolean isMatch(String s, int sOffset, String p, int pOffset) {
-        if (pOffset == p.length()) {
-            return sOffset == s.length();
-        }
-        if (p.charAt(pOffset) == '*') {
-            while(sOffset <= s.length()) {
-                if (isMatch(s, sOffset, p, pOffset + 1)) {
-                    return true;
-                }
-                sOffset++;
-            }
-            return false;
-        } else {
-            if (sOffset < s.length() && (s.charAt(sOffset) == p.charAt(pOffset) || p.charAt(pOffset) == '?')) {
-                return isMatch(s, sOffset + 1, p, pOffset + 1);
-            } else {
-                return false;
-            }
-        }
     }
 }

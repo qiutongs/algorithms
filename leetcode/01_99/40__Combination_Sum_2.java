@@ -8,22 +8,22 @@ class Solution {
         }
         Arrays.sort(candidates);
         List<List<Integer>> ret = new ArrayList<>();
-        dfs(candidates, 0, target, new ArrayList<>(), ret);
+        dfs(candidates, -1, target, new ArrayList<>(), ret);
         return ret;
     }
     
-    private void dfs(int[] candidates, int offset, int target, List<Integer> curList, List<List<Integer>> ret) {
+    private void dfs(int[] candidates, int index, int target, List<Integer> curList, List<List<Integer>> ret) {
         if (target == 0) {
             ret.add(new ArrayList<>(curList));
             return;
         }
-        for (int i = offset; i < candidates.length; i++) {
-            if (i > offset && candidates[i] == candidates[i - 1]) {
+        for (int i = index + 1; i < candidates.length; i++) {
+            if (i > index + 1 && candidates[i] == candidates[i - 1]) {
                 continue;
             }
             if (target - candidates[i] >= 0) {
                 curList.add(candidates[i]);
-                dfs(candidates, i + 1, target - candidates[i], curList, ret);
+                dfs(candidates, i, target - candidates[i], curList, ret);
                 curList.remove(curList.size() - 1);
             }
         }

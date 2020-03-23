@@ -1,62 +1,130 @@
+// DFS + sort
 class Solution {
     public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
-        if (s == null || s.length() == 0 || pairs == null || pairs.isEmpty()) {
-            return s;
+        List<Integer>[] graph = buildGraph(s.length(), pairs);
+        List<List<Integer>> components = getConnectedComponents(graph);
+        char[] str = s.toCharArray();
+        for (List<Integer> component : components) {
+            sort(str, component);
         }
-        
-        HashMap<Integer, HashSet<Integer>> indexChainMap = new HashMap<>();
-        
-        for (List<Integer> pair : pairs) {
-            Integer i1 = pair.get(0), i2 = pair.get(1);
-            HashSet<Integer> chain1 = indexChainMap.get(i1), chain2 = indexChainMap.get(i2);
-            
-            if (chain1 == null && chain2 == null) {
-                HashSet<Integer> newChain = new HashSet<>();
-                newChain.add(i1);
-                newChain.add(i2);
-                indexChainMap.put(i1, newChain);
-                indexChainMap.put(i2, newChain);
-            } else if (chain1 == null && chain2 != null) {
-                chain2.add(i1);
-                indexChainMap.put(i1, chain2);
-            } else if (chain2 == null && chain1 != null) {
-                chain1.add(i2);
-                indexChainMap.put(i2, chain1);
-            } else {
-                if (chain1 != chain2) {
-                    for (Integer chain2Index : chain2) {
-                	 indexChainMap.put(chain2Index, chain1);
-                    }
-                    chain1.addAll(chain2);
-                }
-            }
-        }
-        
-        char[] charArr = s.toCharArray();
-        
-        for (HashSet<Integer> chain : indexChainMap.values()) {
-            sort(charArr, chain);
-        }
-        
-        return new String(charArr);
+        return new String(str);
     }
     
-    private void sort(char[] charArr, HashSet<Integer> chain) {
-        ArrayList<Integer> indexList = new ArrayList<>(chain);
-        Collections.sort(indexList);
-        
-        // Bubble sort.
-        for (int i = 0; i < indexList.size(); i++) {
-            for (int j = 1; j < indexList.size() - i; j++) {
-                int index1 = indexList.get(j - 1);
-                int index2 = indexList.get(j);
-                
-                if (charArr[index1] > charArr[index2]) {
-                    char tmp = charArr[index1];
-                    charArr[index1] = charArr[index2];
-                    charArr[index2] = tmp;
-                }
+    private void sort(char[] str, List<Integer> component) {
+        Collections.sort(component);
+        int[] counts = new int[26];
+        for (int idx : component) {
+            counts[str[idx] - 'a']++;
+        }
+        int j = 0;
+        for (int i = 0; i < 26; i++) {
+            while (counts[i] > 0) {
+                str[component.get(j)] = (char)(i + 'a');
+                j++;
+                counts[i]--;
             }
+        }
+    }
+    
+    private List<List<Integer>> getConnectedComponents(List<Integer>[] graph) {
+        List<List<Integer>> ret = new ArrayList<>();
+        boolean[] visited = new boolean[graph.length];
+        for (int i = 0; i < graph.length; i++) {
+            if (visited[i] == false) {
+                visited[i] = true;
+                List<Integer> component = new ArrayList<>();
+                dfs(graph, i, visited, component);
+                ret.add(component);
+            }
+        }
+        return ret;
+    }
+    
+    private void dfs(List<Integer>[] graph, int node, boolean[] visited, List<Integer> component) {
+        component.add(node);
+        for (int nb : graph[node]) {
+            if (visited[nb] == false) {
+                visited[nb] = true;
+                dfs(graph, nb, visited, component);
+            }
+        }
+    }
+    
+    private List<Integer>[] buildGraph(int n, List<List<Integer>> edges) {
+        List<Integer>[] ret = (List<Integer>[])new List[n];
+        for (int i = 0; i < n; i++) {
+            ret[i] = new ArrayList<>();
+        }
+        for (List<Integer> edge : edges) {
+            ret[edge.get(0)].add(edge.get(1));
+            ret[edge.get(1)].add(edge.get(0));
+        }
+        return ret;
+    }
+}
+
+// Union find + sort
+class Solution {
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        UF uf = new UF(s.length()); 
+        for (List<Integer> pair : pairs) {
+            uf.union(pair.get(0), pair.get(1));
+        }
+        
+        Collection<List<Integer>> components = getConnectedComponents(uf);
+        
+        char[] str = s.toCharArray();
+        for (List<Integer> component : components) {
+            sort(str, component);
+        }
+        return new String(str);
+    }
+    
+    private Collection<List<Integer>> getConnectedComponents(UF uf) {
+        HashMap<Integer, List<Integer>> ret = new HashMap<>();
+        for (int i = 0; i < uf.parents.length; i++) {
+            int root = uf.find(i);
+            ret.putIfAbsent(root, new ArrayList<>());
+            ret.get(root).add(i);
+        }
+        return ret.values();
+    }
+    
+    private void sort(char[] str, List<Integer> component) {
+        Collections.sort(component);
+        int[] counts = new int[26];
+        for (int idx : component) {
+            counts[str[idx] - 'a']++;
+        }
+        int j = 0;
+        for (int i = 0; i < 26; i++) {
+            while (counts[i] > 0) {
+                str[component.get(j)] = (char)(i + 'a');
+                j++;
+                counts[i]--;
+            }
+        }
+    }
+    
+    private class UF {
+        private int[] parents;
+        UF(int n) {
+            parents = new int[n];
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+            }
+        }
+        void union(int p, int q) {
+            int rootP = find(p);
+            int rootQ = find(q);
+            parents[rootP] = rootQ;
+        }
+        int find(int x) {
+            while(parents[x] != x) {
+                parents[x] = parents[parents[x]];
+                x = parents[x];
+            }
+            return x;
         }
     }
 }

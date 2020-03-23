@@ -8,12 +8,12 @@ class Solution {
         return ret;
     }
     
-    private void dfs(int[] candidates, int offset, int target, List<Integer> curList, List<List<Integer>> ret) {
+    private void dfs(int[] candidates, int index, int target, List<Integer> curList, List<List<Integer>> ret) {
         if (target == 0) {
             ret.add(new ArrayList<>(curList));
             return;
         }
-        for (int i = offset; i < candidates.length; i++) {
+        for (int i = index; i < candidates.length; i++) {
             if (target - candidates[i] >= 0) {
                 curList.add(candidates[i]);
                 dfs(candidates, i, target - candidates[i], curList, ret);

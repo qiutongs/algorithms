@@ -1,5 +1,3 @@
-// DFS + memo
-// Time: O(N * N)
 class Solution {
     public boolean canCross(int[] stones) {
         return dfs(stones, 0, 0, new Boolean[stones.length][stones.length]);
@@ -8,34 +6,24 @@ class Solution {
     private boolean dfs(int[] stones, int curIndex, int k, Boolean[][] memo) {
         if (curIndex == stones.length - 1) {
             return true;
+        } else if (curIndex >= stones.length) {
+            return false;
         }
         if (memo[curIndex][k] != null) {
             return memo[curIndex][k];
         }
         boolean ret = false;
         if (curIndex == 0) {
-            if (curIndex + 1 < stones.length && stones[curIndex + 1] - stones[curIndex] == 1) {
+            if (stones[1] - stones[0] == 1) {
                 ret = dfs(stones, curIndex + 1, 1, memo);
             }
         } else {
             for (int i = curIndex + 1; i < stones.length; i++) {
                 int diff = stones[i] - stones[curIndex];
-                if (diff == k - 1) {
-                    if (dfs(stones, i, k - 1, memo)) {
-                        ret = true;
-                    }
-                } else if (diff == k) {
-                    if (dfs(stones, i, k, memo)) {
-                        ret = true;
-                    }
-                } else if (diff == k + 1) {
-                    if (dfs(stones, i, k + 1, memo)) {
-                        ret = true;
-                    }
-                } else if (diff > k + 1) {
+                if (diff >= k - 1 && diff <= k + 1 && dfs(stones, i, diff, memo)) {
+                    ret = true;
                     break;
-                }
-                if (ret) {
+                } else if (diff > k + 1) {
                     break;
                 }
             }

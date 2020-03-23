@@ -33,6 +33,41 @@ class SummaryRanges {
     }
 }
 
+// Unsorted list
+// Time: addNum - O(1), getIntervals - O(NlogN)
+class SummaryRanges {
+    private ArrayList<Integer> vals = new ArrayList<>();
+    
+    /** Initialize your data structure here. */
+    public SummaryRanges() {
+        
+    }
+    
+    public void addNum(int val) {
+        vals.add(val);
+    }
+    
+    public int[][] getIntervals() {
+        ArrayList<int[]> ret = new ArrayList<>();
+        
+        Collections.sort(vals);
+        int[] cur = {vals.get(0), vals.get(0)};
+        for (int i = 1; i < vals.size(); i++) {
+            if (vals.get(i) == vals.get(i - 1)) {
+                continue;
+            }
+            if (vals.get(i) == cur[1] + 1) {
+                cur[1] = vals.get(i);
+            } else {
+                ret.add(cur);
+                cur = new int[]{vals.get(i), vals.get(i)};
+            }
+        }
+        ret.add(cur);
+        return ret.toArray(new int[0][]);
+    }
+}
+
 // Wrong
 // Hashtable: not consider the case that input val is within an existing interval
 // Only storing start and end is not enough

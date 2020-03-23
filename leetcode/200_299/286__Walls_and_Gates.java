@@ -9,43 +9,43 @@ We use the value 231 - 1 = 2147483647 to represent INF as you may assume that th
 Fill each empty room with the distance to its nearest gate. If it is impossible to reach a gate, it should be filled with INF
 */
 class Solution {
+    private static final int[] deltaX = {1, -1, 0, 0};
+    private static final int[] deltaY = {0, 0, 1, -1};
+    
     public void wallsAndGates(int[][] rooms) {
         if (rooms == null || rooms.length == 0 || rooms[0] == null || rooms[0].length == 0) {
             return;
         }
-
-        int[] deltaX = {0, 0, 1, -1};
-        int[] deltaY = {1, -1, 0, 0};
         boolean[][] visited = new boolean[rooms.length][rooms[0].length];
-
         Queue<int[]> queue = new LinkedList<>();
         for (int i = 0; i < rooms.length; i++) {
             for (int j = 0; j < rooms[i].length; j++) {
                 if (rooms[i][j] == 0) {
-                    queue.add(new int[]{i, j});
+                    queue.offer(new int[]{i, j});
                     visited[i][j] = true;
                 }
             }
         }
 
-        int d = 0;
+        int level = -1;
         while(queue.isEmpty() == false) {
+            level++;
             int size = queue.size();
-            d++;
             for (int j = 0; j < size; j++) {
-                int[] curP = queue.poll();
+                int[] cur = queue.poll();
+                if (rooms[cur[0]][cur[1]] > 0) {
+                    rooms[cur[0]][cur[1]] = Math.min(rooms[cur[0]][cur[1]], level);
+                }
                 for (int i = 0; i < 4; i++) {
-                    int x1 = curP[0] + deltaX[i];
-                    int y1 = curP[1] + deltaY[i];
+                    int x1 = cur[0] + deltaX[i];
+                    int y1 = cur[1] + deltaY[i];
                     if (inBound(rooms, x1, y1) && visited[x1][y1] == false && rooms[x1][y1] > 0) {
-                        rooms[x1][y1] = Math.min(rooms[x1][y1], d);
                         visited[x1][y1] = true;
                         queue.add(new int[]{x1, y1});
                     }
                 }
             }
         }
-
     }
 
     private boolean inBound(int[][] rooms, int x, int y) {

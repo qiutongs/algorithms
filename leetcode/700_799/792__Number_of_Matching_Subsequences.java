@@ -1,3 +1,38 @@
+class Solution {
+    public int numMatchingSubseq(String S, String[] words) {
+        int n = words.length;
+        int[] indexes = new int[n];
+        Queue<Integer>[] waitQ = (Queue<Integer>[])new Queue[26];
+        for (int i = 0; i < 26; i++) {
+            waitQ[i] = new LinkedList<>();
+        }
+        for (int i = 0; i < n; i++) {
+            waitQ[words[i].charAt(0) - 'a'].offer(i);
+        }
+        
+        for (int i = 0; i < S.length(); i++) {
+            char c = S.charAt(i);
+            Queue<Integer> wakenQ = waitQ[c - 'a'];
+            int size = wakenQ.size();
+            for (int j = 0; j < size; j++) {
+                int idx = wakenQ.poll();
+                indexes[idx]++;
+                if (indexes[idx] < words[idx].length()) {
+                    waitQ[words[idx].charAt(indexes[idx]) - 'a'].offer(idx);
+                }
+            }
+        }
+        
+        int ret = 0;
+        for (int i = 0; i < n; i++) {
+            if (indexes[i] == words[i].length()) {
+                ret++;
+            }
+        }
+        return ret;
+    }
+}
+
 /*
  * Naive soltion has time complexity: n(|S| + |word|)
  * 

@@ -5,21 +5,21 @@ class Solution {
         }
         String[] tokens = preorder.split(",");
         int[] index = { 0 };
-        return isValid(tokens, index) && index[0] == tokens.length - 1;
+        dfs(tokens, index);
+        return index[0] == tokens.length - 1;
     }
     
-    private boolean isValid(String[] tokens, int[] index) {
-        if (index[0] == tokens.length) {
-            return false;
+    // index stops at the end of current subtree
+    private void dfs(String[] tokens, int[] index) {
+        if (index[0] >= tokens.length) {
+            return;
         }
         if (tokens[index[0]].equals("#")) {
-            return true;
+            return;
         }
         index[0]++;
-        if (isValid(tokens, index) == false) {
-            return false;
-        }
+        dfs(tokens, index);
         index[0]++;
-        return isValid(tokens, index);
+        dfs(tokens, index);
     }
 }

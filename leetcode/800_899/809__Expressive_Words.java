@@ -1,50 +1,37 @@
 class Solution {
     public int expressiveWords(String S, String[] words) {
-        List<Pair> pairs = new ArrayList<>();
-        int count = 1;
-        for (int i = 1; i < S.length(); i++) {
-            if (S.charAt(i) != S.charAt(i - 1)) {
-                pairs.add(new Pair(S.charAt(i - 1), count));
-                count = 1;
-            } else {
-                count++;
-            }
-        }
-        pairs.add(new Pair(S.charAt(S.length() - 1), count));
-        
         int ret = 0;
         for (String word : words) {
-            if (stretchy(pairs, word)) {
+            if (stretchy(S, word)) {
                 ret++;
             }
         }
         return ret;
     }
     
-    private boolean stretchy(List<Pair> pairs, String word) {
-        int i = 0;
-        for (Pair pair : pairs) {
-            if (i == word.length() || pair.c != word.charAt(i)) {
+    private boolean stretchy(String S, String word) {
+        int i = 0, j = 0;
+        while(i < S.length() && j < word.length()) {
+            char cS = S.charAt(i);
+            char cW = word.charAt(j);
+            if (cS != cW) {
                 return false;
             }
-            int count = 0;
-            while(i < word.length() && pair.c == word.charAt(i)) {
-                count++;
+            int count1 = 0;
+            while(i < S.length() && j < word.length() && S.charAt(i) == cS && word.charAt(j) == cW) {
+                count1++;
+                i++;
+                j++;
+            }
+            int count2 = 0;
+            while(i < S.length() && S.charAt(i) == cS) {
+                count2++;
                 i++;
             }
-            if ((count < pair.n && pair.n < 3) || count > pair.n) {
+            if (count1 == 1 && count2 == 1) {
                 return false;
             }
         }
-        return true;
-    }
-    
-    private class Pair {
-        char c;
-        int n;
-        Pair(char c, int n) {
-            this.c = c;
-            this.n = n;
-        }
+        return i == S.length() && j == word.length();
     }
 }
