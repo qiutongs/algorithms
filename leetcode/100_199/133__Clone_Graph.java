@@ -1,18 +1,27 @@
-/*
-// Definition for a Node.
-class Node {
-    public int val;
-    public List<Node> neighbors;
-
-    public Node() {}
-
-    public Node(int _val,List<Node> _neighbors) {
-        val = _val;
-        neighbors = _neighbors;
+// DFS + hashtable
+class Solution {
+    public Node cloneGraph(Node node) {
+        if (node == null) {
+            return null;
+        }
+        return dfs(node, new HashMap<>());
     }
-};
-*/
-class Solution1 {
+    
+    private Node dfs(Node node, HashMap<Node, Node> map) {
+        if (map.containsKey(node)) {
+            return map.get(node);
+        }
+        Node ret = new Node(node.val);
+        map.put(node, ret);
+        for (Node nb : node.neighbors) {
+            ret.neighbors.add(dfs(nb, map));
+        }
+        return ret;
+    }
+}
+
+// BFS
+class Solution {
     public Node cloneGraph(Node node) {
         if (node == null) {
             return null;
@@ -52,46 +61,7 @@ class Solution1 {
     }
 }
 
-class Solution2 {
-    public Node cloneGraph(Node node) {
-        if (node == null) {
-            return null;
-        }
-
-        Node ret = new Node(node.val, new LinkedList<>());
-        
-        HashMap<Node, Node> oldNewMap = new HashMap<>();
-        
-        oldNewMap.put(node, ret);
-        
-        dfs(node, oldNewMap);
-        
-        return ret;
-    }
-    
-    private void dfs(Node node, HashMap<Node, Node> oldNewMap) {
-        if (node == null) {
-            return;
-        }
-        
-        Node newNode = oldNewMap.get(node);
-        
-        for (Node neighbor : node.neighbors) {
-            Node newNeighbor = oldNewMap.get(neighbor);
-            
-            if (newNeighbor == null) {
-                newNeighbor = new Node(neighbor.val, new LinkedList<>());
-                oldNewMap.put(neighbor, newNeighbor);
-                
-                dfs(neighbor, oldNewMap);
-            }
-            
-            newNode.neighbors.add(newNeighbor);
-        }
-    }
-}
-
-class Solution3 {
+class Solution {
     public Node cloneGraph(Node node) {
         if (node == null) {
             return null;

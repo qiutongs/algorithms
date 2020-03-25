@@ -23,6 +23,30 @@ class Solution {
     }
 }
 
+// Two pointer
+class Solution {
+    public int trap(int[] height) {
+        int ret = 0;
+        int l = 0, r = height.length - 1;
+        while(l < r) {
+            if (height[l] < height[r]) {
+                int lH = height[l];
+                while(l < r && height[l] <= lH) {
+                    ret += lH - height[l];
+                    l++;
+                }
+            } else {
+                int rH = height[r];
+                while(l < r && height[r] <= rH) {
+                    ret += rH - height[r];
+                    r--;
+                }
+            }
+        }
+        return ret;
+    }
+}
+
 // Decreasing monotonic stack
 class Solution {
     public int trap(int[] height) {

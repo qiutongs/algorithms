@@ -1,3 +1,42 @@
+// 2D -> 1D Largetst rectagnle, treat each row as bottom
+// Time: O(M * N)
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int ret = 0;
+        int m = matrix.length, n = matrix[0].length;
+        int[] heights = new int[n];
+        for (int i = 0; i < m; i++) {
+            updateHeights(matrix, i, heights);
+            ret = Math.max(ret, largestRectangleArea(heights));
+        }
+        return ret;
+    }
+    
+    private int largestRectangleArea(int[] heights) {
+        int ret = 0;
+        Stack<Integer> upStack = new Stack<>();
+        for (int i = 0; i <= heights.length; i++) {
+            while (upStack.isEmpty() == false && (i == heights.length || heights[upStack.peek()] > heights[i])) {
+                int hIdx = upStack.pop();
+                int lSmallIdx = upStack.isEmpty() ? -1 : upStack.peek();
+                int rSmallIdx = i;
+                ret = Math.max(ret, heights[hIdx] * (rSmallIdx - lSmallIdx - 1));
+            }
+            upStack.push(i);
+        }
+        return ret;
+    }
+    
+    private void updateHeights(char[][] matrix, int row, int[] heights) {
+        for (int i = 0; i < matrix[row].length; i++) {
+            heights[i] = matrix[row][i] == '0' ? 0 : 1 + heights[i];
+        }
+    }
+}
+
 // Wrong: at least not handle the case where there are multiple same max area but different w and h
 // DP: try to be similar as problem Max Square
 class Solution {
